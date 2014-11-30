@@ -8,3 +8,5 @@
 *.tar.gz
 *.txt
 /*.zip
+/example/*.js
+/example/*.json
