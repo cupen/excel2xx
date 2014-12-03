@@ -8,7 +8,6 @@ setup(
     license='WTFPL',
     author='cupen',
     install_requires = [
-        'pymysql >= 0.6',
         'xlrd >= 0.9',
         'docopt >= 0.6.0'
     ],

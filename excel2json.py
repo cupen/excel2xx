@@ -16,7 +16,8 @@ Options:
     -t --type=TYPE output json object type was 'list' or 'dict'. [default: list]
 
 """
-import docopt, os
+import os
+from docopt import docopt
 
 __author__ = 'cupen'
 __email__ = 'cupen@foxmail.com'

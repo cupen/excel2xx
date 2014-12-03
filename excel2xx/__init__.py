@@ -7,7 +7,6 @@ import os
 import re
 import json
 from collections import OrderedDict
-from docopt import docopt
 from xlrd import open_workbook
 
 class Excel:
