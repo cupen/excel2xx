@@ -11,8 +11,15 @@ setup(
         'xlrd >= 0.9',
         'docopt >= 0.6.0',
         'mako >= 1.0.0',
+        'msgpack-python >= 0.4.8'
     ],
     author_email='cupen@foxmail.com',
-    description='Export excel to something(e.g. json sql lua).',
-    scripts=['excel2xx.py']
+    description='Export something(e.g. json, msgpack, sql, lua) from Excel to file.',
+    entry_points={
+       "console_scripts": [
+           "excel2xx=excel2xx.main:main_docopt",
+       ],
+    },
+    python_requires='>=3.4.*',
+
 )

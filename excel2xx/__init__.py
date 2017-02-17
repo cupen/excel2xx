@@ -1,13 +1,13 @@
 # encoding: utf-8
 import os
 import re
-import json
 import xlrd
 from collections import OrderedDict
 from excel2xx import fields
 
 __author__ = 'cupen'
 __email__ = 'cupen@foxmail.com'
+
 
 class Excel:
 
@@ -71,7 +71,7 @@ class Excel:
 
 class Sheet:
 
-    def __init__(self, excel: Excel, sheet: xlrd.sheet.Sheet):
+    def __init__(self, excel, sheet):
         self.__excel = excel
         self.__sheet = sheet
         self.__fields = []

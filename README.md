@@ -7,7 +7,7 @@
 你总会需要一些由非技术人员提供的数据来充实你的程序内容，比如美术资源和各种数值。美术资源好说，
 规范好目录和文件名就万事大吉了，但数值咋放呢？必须得有一个他懂、你懂、程序也懂的数值载体，
 除了 Excel 估计你也没得选了，总不能指望人家跑来编辑什么 json、xml 之类的结构化文本吧？何况
- Excel 本身也是个强大的数据处理工具，拿它来做数值易如反掌。于是本项目应运而生，专门用于提取
+ Excel 本身就是个强大的数据处理工具，拿它来做数值易如反掌。于是本项目应运而生，专门用于提取
  Excel 里的二维数据，生成结构化的文本以供你的程序使用。
 
 # 特性
@@ -17,29 +17,25 @@
 
 # 运行依赖
 
-  * Python3
-  * [xlrd](www.python-excel.org) >= 0.9
-  * [docopt](http://docopt.org/) >= 0.6.0
+  * Python2 or Python3
 
 # 安装
-```bash
+```
 $ python setup install
 ```
 
 # 使用
 
-```bash
-$ excel2json.py --help
+```
+$ excel2xx json example/test.xls  -o example/test.json
+$ excel2xx msgpack example/test.xls --output example/test.msgpack
+$ excel2xx mako example/test.xls  -o example/test.lua --template example/test.mako
 ```
 
 # TODO
 
- - [x] 睡觉 :sleeping:
- - [x] 睡觉 :sleeping:
- - [ ] 睡觉 :sleeping:
- - [ ] 睡觉 :sleeping:
- - [ ] Python2.7 Support :stuck_out_tongue_winking_eye:
- - [ ] Simple DSL :stuck_out_tongue_winking_eye:
+ - [x] Python2.7 Support
+ - [ ] Simple DSL
  - [ ] Export to Lua code :stuck_out_tongue_winking_eye:
  - [ ] Export to SQL code :stuck_out_tongue_winking_eye:
 

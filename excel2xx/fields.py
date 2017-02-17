@@ -3,7 +3,7 @@ __author__ = 'cupen'
 
 class Field:
 
-    def __init__(self, name, colnum: int):
+    def __init__(self, name, colnum):
         self.name = name
         self.colum = colnum
         pass
