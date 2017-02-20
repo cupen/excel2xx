@@ -1,4 +1,5 @@
 # encoding: utf-8
+from __future__ import unicode_literals, print_function
 import os
 import re
 import xlrd
@@ -27,7 +28,10 @@ class Excel:
         self.__filePath = filePath
         self.__fieldRowNum = fieldRowNum
         self.__callback = None
-        self.__wb = xlrd.open_workbook(self.__filePath)
+        if isinstance(self.__filePath, str):
+            self.__wb = xlrd.open_workbook(self.__filePath)
+        else:
+            self.__wb = xlrd.open_workbook(file_contents=self.__filePath.read())
         pass
 
     @property

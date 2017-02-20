@@ -1,7 +1,5 @@
 # encoding: utf-8
-import traceback
-from docopt import docopt
-
+from __future__ import unicode_literals, print_function
 import excel2xx.main
 
 __author__ = 'cupen'

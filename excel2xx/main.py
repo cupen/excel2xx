@@ -17,6 +17,7 @@ Options:
     -r --row-number=ROW_NUMBER     first row. [default: 2]
     --debug                        show debug infomation.
 """
+from __future__ import unicode_literals, print_function
 import os
 import traceback
 from docopt import docopt
