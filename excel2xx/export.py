@@ -4,15 +4,12 @@ import json
 from collections import OrderedDict
 from pprint import pformat
 from mako.template import Template
+import sys
+if sys.version_info[0] == 2:
+    from io import open
 
 __author__ = 'cupen'
 __email__ = 'cupen@foxmail.com'
-
-import sys
-if sys.version_info[0] == 2:
-    import codecs
-    def _open(file, mode='r', buffering=-1, encoding=None, errors=None, newline=None, closefd=True, opener=None):
-        return codecs.open(filename=file, mode=mode, encoding=encoding, errors=errors, buffering=buffering)
 
 
 def toJson(excel, output, encoding='utf-8'):

@@ -1,12 +1,13 @@
-/.idea
+/.*
 /build
 /dist
-/*.egg-info
+*.egg-info
 
-
-*.pyc
+*.py[cd]
 *.tar.gz
 *.txt
-/*.zip
-/example/*.js
-/example/*.json
+*.zip
+*.js
+*.json
+*.lua
+*.msgpack

@@ -1,11 +1,15 @@
 # coding:utf-8
 from __future__ import unicode_literals, print_function
 
+import sys
+
 __author__ = 'cupen'
+
+if sys.version_info[0] == 2:
+    str = unicode
 
 
 class Field:
-
     def __init__(self, name, colnum):
         self.name = name
         self.colum = colnum
@@ -32,6 +36,8 @@ class Float(Field):
 
 class Array(Field):
     def format(self, v):
+        if isinstance(v, str):
+            v = v.split(',')
         return list(v)
 
 

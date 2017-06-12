@@ -127,12 +127,6 @@ class Sheet:
             yield row
         pass
 
-    def getCellValue(self, cell):
-        if isinstance(cell.format, float) and cell.format == int(cell.format):
-            return int(cell.format)
-
-        return cell.format
-
     def toList(self):
         return list(iter(self))
 
