@@ -1,8 +1,9 @@
 from setuptools import setup
+from excel2xx.main import __version__
 
 setup(
     name='excel2xx',
-    version='0.1.0',
+    version=__version__,
     packages=['excel2xx'],
     url='https://github.com/cupen/excel2xx',
     license='WTFPL',

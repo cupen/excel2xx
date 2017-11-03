@@ -15,7 +15,8 @@ Options:
     -v --version                   show version and exit.
     -o --output=FILE               output to file.
     -r --row-number=ROW_NUMBER     first row. [default: 2]
-    --debug                        show debug infomation.
+    -v --verbose                   show debug infomation.
+    -vv --verbose2                 show more debug infomation.
 """
 from __future__ import unicode_literals, print_function
 import os
@@ -25,6 +26,7 @@ from excel2xx import Excel, export
 
 __author__ = 'cupen'
 __email__ = 'cupen@foxmail.com'
+__version__ = '0.1.1'
 
 
 def main(args):
@@ -56,11 +58,11 @@ def main(args):
 
 def main_docopt():
     args = docopt(__doc__)
-    if args['--debug']: print(args)
+    if args['--verbose2']: print(args)
     try:
         return main(args)
     except Exception as e:
-        errorMsg = traceback.format_exc() if args['--debug'] else e
+        errorMsg = traceback.format_exc() if args['--verbose'] else e
         print(errorMsg)
         return 2
     pass

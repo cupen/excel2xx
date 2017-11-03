@@ -1,15 +1,21 @@
 # coding: utf-8
 from __future__ import unicode_literals, print_function
+import sys
 import json
 from collections import OrderedDict
 from pprint import pformat
 from mako.template import Template
-import sys
-if sys.version_info[0] == 2:
-    from io import open
+from io import open
+from datetime import datetime, date
 
 __author__ = 'cupen'
 __email__ = 'cupen@foxmail.com'
+
+
+def _defaultSerialize(obj):
+    if isinstance(obj, (datetime, date)):
+        return obj.isoformat()
+    raise TypeError("Type %s not serializable" % type(obj))
 
 
 def toJson(excel, output, encoding='utf-8'):
@@ -17,8 +23,13 @@ def toJson(excel, output, encoding='utf-8'):
     for sheet in excel:
         _dict[sheet.name] = list(sheet)
 
+    if sys.version_info[0] == 2:
+        with open(output, mode='wb') as f:
+            json.dump(_dict, f, ensure_ascii=False, encoding=encoding, default=_defaultSerialize)
+        return
+
     with open(output, mode='w', encoding=encoding) as f:
-        json.dump(_dict, f)
+        json.dump(_dict, f, ensure_ascii=False, default=_defaultSerialize)
     pass
 
 
@@ -39,5 +50,5 @@ def toMsgPack(excel, output, encoding='utf-8'):
         _dict[sheet.name] = list(sheet)
 
     with open(output, mode='wb') as f:
-        f.write(msgpack.packb(_dict))
+        f.write(msgpack.packb(_dict, default=_defaultSerialize))
     pass

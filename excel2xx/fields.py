@@ -1,18 +1,18 @@
 # coding:utf-8
 from __future__ import unicode_literals, print_function
 
-import sys
+import xlrd
+from xlrd.xldate import xldate_as_datetime
 
 __author__ = 'cupen'
 
-if sys.version_info[0] == 2:
-    str = unicode
-
 
 class Field:
-    def __init__(self, name, colnum):
+
+    def __init__(self, name, colnum, wb=None):
         self.name = name
         self.colum = colnum
+        self.wb = wb
         pass
 
     def format(self, v):
@@ -36,8 +36,6 @@ class Float(Field):
 
 class Array(Field):
     def format(self, v):
-        if isinstance(v, str):
-            v = v.split(',')
         return list(v)
 
 
@@ -45,4 +43,17 @@ class Auto(Field):
     def format(self, v):
         return v
 
+class Date(Field):
+    def format(self, v):
+        try:
+            return xldate_as_datetime(v, self.wb.datemode).date()
+        except:
+            return None
 
+
+class DateTime(Field):
+    def format(self, v):
+        try:
+            return xldate_as_datetime(v, self.wb.datemode)
+        except:
+            return None
