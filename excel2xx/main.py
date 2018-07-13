@@ -22,11 +22,10 @@ from __future__ import unicode_literals, print_function
 import os
 import traceback
 from docopt import docopt
-from excel2xx import Excel, export
+from excel2xx import Excel, export, FieldMeta
 
 __author__ = 'cupen'
-__email__ = 'cupen@foxmail.com'
-__version__ = '0.1.1'
+__email__ = "xcupen@gmail.com"
 
 
 def main(args):
@@ -40,8 +39,7 @@ def main(args):
         print('Unexist file:' + excelFile)
         return 1
 
-    fieldRowNum = args.get('--row-number', 2)
-    excel = Excel(excelFile, fieldRowNum=int(fieldRowNum))
+    excel = Excel(excelFile, fieldMeta=FieldMeta())
 
     if args['json']:
         export.toJson(excel, args['--output'] or "%(excelFile)s.json"%locals())

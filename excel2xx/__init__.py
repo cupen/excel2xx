@@ -7,28 +7,94 @@ from collections import OrderedDict
 from excel2xx import fields
 
 __author__ = 'cupen'
-__email__ = 'cupen@foxmail.com'
+__email__ = 'xcupen@gmail.com'
 
+DEFINE_FIELDS = {
+    '':       fields.Auto,
+    'auto':   fields.Auto,
+
+    'int':    fields.Int,
+    'number': fields.Int,
+    'float':  fields.Float,
+    'str':    fields.String,
+    'string': fields.String,
+
+    'array':  fields.Array,
+    'array<int>': fields.IntArray,
+    'array<string>': fields.Array,
+
+    'date': fields.Date,
+    'datetime': fields.DateTime,
+
+    'object': fields.Object,
+    'itemexpr': fields.ItemExpr,
+    'array<itemexpr>': fields.ItemExprArray,
+
+    'Object': fields.Object,
+    'ItemExpr': fields.ItemExpr,
+    'array<ItemExpr>': fields.ItemExprArray,
+}
+
+
+class FieldMeta:
+    def __init__(self, name=0, type=1, desc=2, data=3):
+        self._lineNumCfg = {
+            "name": name,
+            "type": type,
+            "desc": desc,
+            "data": data,
+        }
+        pass
+
+    @property
+    def nameRowIdx(self):
+        return self._lineNumCfg['name']
+
+    @property
+    def typeRowIdx(self):
+        return self._lineNumCfg['type']
+
+    @property
+    def descRowIdx(self):
+        return self._lineNumCfg['desc']
+
+    @property
+    def dataRowIdx(self):
+        return self._lineNumCfg['data']
+
+    def parseFieldType(self, fieldType):
+        if fieldType.startswith("object"):
+            return "object"
+        return fieldType
+
+    def parseSheet(self, excel, sheet):
+        if sheet.nrows < self.nameRowIdx + 1:
+            return {}
+
+        nameRow = sheet.row(self.nameRowIdx)
+        typeRow = sheet.row(self.typeRowIdx)
+        # descRow = sheet.row(self.descRowIdx)
+
+        fields = OrderedDict()
+        for i in range(0, len(nameRow)):
+            fieldName = str(nameRow[i].value)
+            fieldType = str(typeRow[i].value)
+
+            fieldMeta = DEFINE_FIELDS.get(self.parseFieldType(fieldType))
+            if not fieldMeta:
+                raise RuntimeError('Unexist field meta "%s". check the field(%s)' % (fieldType, repr(typeRow[i])))
+
+            fields[fieldName] = fieldMeta(fieldName, fieldType, excel)
+            i += 1
+            pass
+        return fields
+    pass
 
 class Excel:
+    def __init__(self, fpathOrFp, fieldMeta=FieldMeta(name=0, type=1, desc=2, data=3)):
+        self.__filePath = fpathOrFp
+        self.fieldMeta = fieldMeta
 
-    XX_TYPE_LIST = 1
-    XX_TYPE_DICT = 2
-
-    DEFINE_FIELDS = {
-        '':       fields.Auto,
-        'int':    fields.Int,
-        'float':  fields.Float,
-        'str':    fields.String,
-        'string': fields.String,
-        'array':  fields.Array,
-        'date': fields.Date,
-        'datetime': fields.DateTime,
-    }
-
-    def __init__(self, filePath, fieldRowNum=1):
-        self.__filePath = filePath
-        self.__fieldRowNum = fieldRowNum
         self.__callback = None
         if isinstance(self.__filePath, str):
             self.__wb = xlrd.open_workbook(self.__filePath)
@@ -40,21 +106,21 @@ class Excel:
     def datemode(self):
         return self.__wb.datemode
 
-    @property
-    def fieldRowNum(self):
-        return self.__fieldRowNum
-
-    def getFieldRowNum(self):
-        return self.__fieldRowNum
-
     def getSheet(self, sheetName, alias=''):
         sheet = None
         try:
             sheet = self.__wb.sheet_by_name(sheetName)
-        except xlrd.XLRDError:
+        except xlrd.XLRDError as e:
+            if not alias:
+                raise e
             sheet = self.__wb.sheet_by_name(alias)
-
         return Sheet(self, sheet)
+
+    def __getitem__(self, nameOrIdx):
+        if isinstance(nameOrIdx, int):
+            sheet = self.__wb.sheet_by_index(nameOrIdx)
+            return Sheet(self, sheet)
+        return self.getSheet(nameOrIdx)
 
     def __iter__(self):
         sheets = map(lambda x: Sheet(self, x), self.__wb.sheets())
@@ -77,16 +143,6 @@ class Excel:
             _dict[sheet.name] = sheet.toDict()
         return _dict
 
-    def getFieldMeta(self, fieldMetaName):
-        return self.DEFINE_FIELDS.get(fieldMetaName)
-
-    def setFieldMeta(self, fieldMetaName, field, overridable=False):
-        if fieldMetaName in self.DEFINE_FIELDS and not overridable:
-            raise RuntimeError('"%s" was existed.' % (fieldMetaName,))
-
-        self.DEFINE_FIELDS[fieldMetaName] = field
-        pass
-
 
 class Sheet:
 
@@ -104,67 +160,60 @@ class Sheet:
         """
         :rtype: dict of [str, Field]
         """
-        if len(self.__fields) > 0:
-            return self.__fields.copy()
-
-        fieldRowNum = self.__excel.fieldRowNum
-        if self.__sheet.nrows < fieldRowNum:
-            return {}
-
-        fieldRowIndex = fieldRowNum - 1
-        fieldRow = self.__sheet.row(fieldRowIndex)
-        fields = OrderedDict()
-        for cell in fieldRow:
-            # print("cell.xf_index:%s ctype:%s" % (cell.xf_index, cell.ctype))
-            tmpArr = list(map(lambda x: x.strip(), str(cell.value).split(':')))
-
-            if len(tmpArr) not in (1, 2):
-                raise RuntimeError('Invalid field(xf_index:%s ctype:%s value=%s' % (cell.xf_index, cell.ctype, cell.format))
-
-            fieldName = tmpArr[0]
-            fieldType = tmpArr[1] if len(tmpArr) == 2 else ''
-
-            # print("fieldName={fieldName} fieldType={fieldType}".format(**locals()))
-            fieldMeta = self.__excel.getFieldMeta(fieldType)
-            if not fieldMeta:
-                raise RuntimeError('Unexist field meta "%s". check the field value:=%s' % (fieldType, cell.format))
-
-            fields[fieldName] = fieldMeta(fieldName, 0, self.__excel)
-
-        self.__fields = fields
-        return self.__fields
+        sheet = self.__sheet
+        # fieldMeta = self.__excel.fieldMeta
+        if len(self.__fields) <= 0:
+            self.__fields = self.__excel.fieldMeta.parseSheet(self.__excel, sheet)
+        return self.__fields.copy()
 
     def rows(self):
-        skipRows = self.__excel.fieldRowNum
+        skipRows = self.__excel.fieldMeta.dataRowIdx
         for row in self.__sheet.get_rows():
             if skipRows > 0:
                 skipRows -= 1
+                # print(row)
                 continue
 
             yield row
         pass
 
-    def getCellValue(self, cell):
-        if isinstance(cell.format, float) and cell.format == int(cell.format):
-            return int(cell.format)
-
-        return cell.format
-
     def toList(self):
         return list(iter(self))
 
-    def toDict(self):
+    def firstFieldName(self):
+        fields = self.fields()
+        for fieldName  in fields:
+            return fieldName
+        return None
+
+    def toDict(self, valueIsList=False):
         _dict = OrderedDict()
-        firstField = None
+        firstField = self.firstFieldName()
+        if not firstField:
+            raise Exception("Invalid first field name. %s" % firstField)
         for row in self:
             if not row:
                 continue
 
-            if not firstField:
-                for tmp in row.keys():
-                    firstField = tmp
-                    break
-            _dict[row[firstField]] = row
+            value = row[firstField]
+            if (not valueIsList) and (value in _dict):
+                raise Exception("Duplicate value of field name. %s=%s" % (firstField, value))
+            _dict[value] = row
+        return _dict
+
+    def toDict2(self):
+        _dict = OrderedDict()
+        firstField = self.firstFieldName()
+        if not firstField:
+            raise Exception("Invalid first field name. %s" % firstField)
+        for row in self:
+            if not row:
+                continue
+
+            value = row[firstField]
+            if value not in _dict:
+                _dict[value] = []
+            _dict[value].append(row)
         return _dict
 
     def toDataFrame(self):
@@ -185,3 +234,13 @@ class Sheet:
 
             yield _dict
         pass
+
+
+def addFieldType(typeName, parser):
+    DEFINE_FIELDS[typeName] = parser
+    pass
+
+
+def delFieldType(typeName, parser):
+    del DEFINE_FIELDS[typeName]
+    pass

@@ -9,7 +9,7 @@ from io import open
 from datetime import datetime, date
 
 __author__ = 'cupen'
-__email__ = 'cupen@foxmail.com'
+__email__ = 'xcupen@gmail.com'
 
 
 def _defaultSerialize(obj):
