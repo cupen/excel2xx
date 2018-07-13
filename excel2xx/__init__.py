@@ -78,8 +78,8 @@ class FieldMeta:
 
         fields = OrderedDict()
         for i in range(0, len(nameRow)):
-            fieldName = str(nameRow[i].value)
-            fieldType = str(typeRow[i].value)
+            fieldName = str(nameRow[i].value).strip()
+            fieldType = str(typeRow[i].value).strip()
 
             fieldMeta = DEFINE_FIELDS.get(self.parseFieldType(fieldType))
             if not fieldMeta:
