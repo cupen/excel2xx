@@ -130,10 +130,13 @@ class ItemExpr(Field):
         return Exception("Invalid ItemExpr. name:%s type:%s value:%s" % (self.name, self.type, value))
 
     def format(self, v):
-        if not isinstance(v, str):
+        if not isinstance(v, (str, list)):
             raise self.newException(v)
 
-        tmpArr = v.split("-")
+        tmpArr = v
+        if isinstance(tmpArr, str):
+            tmpArr = v.split("-")
+
         if len(tmpArr) <= 0:
             raise self.newException(v)
 
@@ -161,4 +164,29 @@ class ItemExprArray(ItemExpr):
 
         _iter = map(lambda x: x.strip(), v.split(","))
         _iter = map(lambda x: super(ItemExprArray, self).format(x), _iter)
+        return list(_iter)
+
+
+class Reward(ItemExpr):
+    def newException(self, value):
+        return Exception("Invalid Array<ItemExpr>. name:%s type:%s value:%s" % (self.name, self.type, value))
+
+    def parseItemExprWithWeight(self, expr_w):
+        tmpArr = expr_w.split(",")
+        weight = int(tmpArr[0])
+        if len(tmpArr) < 2:
+            raise self.newException(expr_w)
+
+        exprObj = ItemExpr.format(self, tmpArr[1])
+        return {
+            "weight": weight,
+            "item": exprObj,
+        }
+
+    def format(self, v):
+        if not isinstance(v, str):
+            raise self.newException(v)
+
+        _iter = map(lambda x: x.strip(), v.split(";"))
+        _iter = map(lambda x: self.parseItemExprWithWeight(x), _iter)
         return list(_iter)

@@ -33,6 +33,7 @@ DEFINE_FIELDS = {
     'Object': fields.Object,
     'ItemExpr': fields.ItemExpr,
     'array<ItemExpr>': fields.ItemExprArray,
+    'Reward': fields.Reward,
 }
 
 
@@ -223,14 +224,20 @@ class Sheet:
     def __iter__(self):
         fields = self.fields()
         fieldsArr = tuple(fields.values())
+        rowNum = 0
         for row in self.rows():
+            rowNum += 1
             row = list(row)
 
             _dict = OrderedDict()
             for i in range(len(fieldsArr)):
                 cell = row[i]
                 field = fieldsArr[i]
-                _dict[field.name] = field.format(cell.value)
+                try:
+                    _dict[field.name] = field.format(cell.value)
+                except Exception as ex:
+                    print("Failed to parse the value(\"%s\") of Field(%s). row: %s col: %s" %(cell.value, field.type, rowNum, i))
+                    pass
 
             yield _dict
         pass
