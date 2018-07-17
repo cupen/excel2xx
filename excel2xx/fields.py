@@ -141,7 +141,7 @@ class ItemExpr(Field):
             raise self.newException(v)
 
         _type = tmpArr[0]
-        _id = tmpArr[1] if len(tmpArr) == 2 else ""
+        _id = "" if len(tmpArr) == 2 else tmpArr[1]
         count = int(tmpArr[2]) if len(tmpArr) >= 3 else int(tmpArr[1])
 
         rs =  {
