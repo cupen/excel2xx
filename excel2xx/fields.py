@@ -122,8 +122,15 @@ class Object(Field):
 
 
 class ItemExpr(Field):
+    NO_ID = set()
+
     def __init__(self, name, type, wb=None):
         super(ItemExpr, self).__init__(name, type, wb)
+        pass
+
+    @classmethod
+    def addNoIdType(cls, typeNmae):
+        cls.NO_ID.add(typeNmae)
         pass
 
     def newException(self, value):
@@ -141,17 +148,17 @@ class ItemExpr(Field):
             raise self.newException(v)
 
         _type = tmpArr[0]
-        _id = "" if len(tmpArr) == 2 else tmpArr[1]
-        count = int(tmpArr[2]) if len(tmpArr) >= 3 else int(tmpArr[1])
+        if _type in self.NO_ID:
+            return {
+                "type": _type,
+                "count": int(tmpArr[1]),
+            }
 
-        rs =  {
+        return {
             "type": _type,
-            "id": _id,
-            "count": count
+            "id": tmpArr[1],
+            "count": int(tmpArr[2]) if len(tmpArr) >= 3 else 1
         }
-        if not rs["id"]:
-            del rs["id"]
-        return rs
 
 
 class ItemExprArray(ItemExpr):
