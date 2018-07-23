@@ -1,6 +1,7 @@
 # coding:utf-8
 from __future__ import unicode_literals, print_function
 
+import re
 from collections import namedtuple, OrderedDict
 
 from xlrd.xldate import xldate_as_datetime
@@ -18,7 +19,8 @@ class Field:
     def format(self, v):
         raise NotImplementedError
 
-    def as_type(self, typeName):
+    @classmethod
+    def as_type(cls, typeName):
         typeName = typeName.strip()
         if typeName == "int":
             return int
@@ -80,16 +82,17 @@ class DateTime(Field):
 class Object(Field):
     def __init__(self, name, type, wb=None):
         super(Object, self).__init__(name, type, wb)
-        self.attrs = self.parseValue(text=type)
+        self.attrs = self.parseType(text=type)
         pass
 
     def newException(self):
         return Exception("Invalid object define. name:%s type:%s attrs:%s" % (self.name, self.type, self.attrs))
 
-    def parseValue(self, text):
+    def parseType(self, text):
         text = text.strip()
         if not text.startswith("object"):
             raise self.newException()
+
         attrDefs = text.replace("object", "").replace(" ", "").strip("()").split(",")
         if len(attrDefs) <= 0:
             raise self.newException()
@@ -108,18 +111,40 @@ class Object(Field):
             pass
         return attrs
 
-    def format(self, v):
-        vals = list(map(lambda x: x.strip(), v.strip("{}<> ").split(",")))
+    def parseValue(self, attrs, valText):
+        vals = list(map(lambda x: x.strip(), valText.strip("{}<> ").split(",")))
         if len(vals) != len(self.attrs):
-            raise Exception("Invalid object define. name:%s type:%s attrs:%s val:%s" % (self.name, self.type, self.attrs, v))
+            raise Exception(
+                "Invalid object define. name:%s type:%s attrs:%s val:%s" % (self.name, self.type, self.attrs, valText))
 
         d = OrderedDict()
         for i in range(0, len(vals)):
-            attr = self.attrs[i]
+            attr = attrs[i]
             d[attr.name] = attr.type(vals[i])
             pass
         return d
 
+    def format(self, v):
+        return self.parseValue(self.attrs, v)
+
+
+class ObjectArray(Object):
+    pattern = re.compile("{[^{^}]*}")
+
+    def __init__(self, name, type, wb=None):
+        _type = type.replace("array", "").strip("<>")
+        super(ObjectArray, self).__init__(name, _type, wb=wb)
+        pass
+
+    def newException(self):
+        return Exception("Invalid array<object> define. name:%s type:%s attrs:%s" % (self.name, self.type, self.attrs))
+
+    def format(self, v):
+        _list = []
+        for tmpVal in self.pattern.findall(v):
+            obj = super(ObjectArray, self).format(tmpVal.strip())
+            _list.append(obj)
+        return _list
 
 class ItemExpr(Field):
     NO_ID = set()

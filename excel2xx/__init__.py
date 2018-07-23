@@ -27,12 +27,15 @@ DEFINE_FIELDS = {
     'datetime': fields.DateTime,
 
     'object': fields.Object,
+    'array<object>': fields.ObjectArray,
+
     'itemexpr': fields.ItemExpr,
     'array<itemexpr>': fields.ItemExprArray,
 
-    'Object': fields.Object,
     'ItemExpr': fields.ItemExpr,
     'array<ItemExpr>': fields.ItemExprArray,
+
+
     'Reward': fields.Reward,
 }
 
@@ -63,9 +66,13 @@ class FieldMeta:
     def dataRowIdx(self):
         return self._lineNumCfg['data']
 
-    def parseFieldType(self, fieldType):
-        if fieldType.startswith("object"):
+    def parseFieldType(self, fieldType: str) -> str:
+        fieldType = fieldType.replace(" ", "")
+        if fieldType.startswith("object") or fieldType.startswith("Object"):
             return "object"
+
+        if fieldType.startswith("array<object") or fieldType.startswith("array<Object"):
+            return "array<object>"
         return fieldType
 
     def parseSheet(self, excel, sheet):
@@ -128,7 +135,6 @@ class Excel:
         for sheet in sheets:
             if sheet.name.startswith('#'):
                 continue
-            # sheet.name
             yield sheet
         pass
 
@@ -162,7 +168,6 @@ class Sheet:
         :rtype: dict of [str, Field]
         """
         sheet = self.__sheet
-        # fieldMeta = self.__excel.fieldMeta
         if len(self.__fields) <= 0:
             self.__fields = self.__excel.fieldMeta.parseSheet(self.__excel, sheet)
         return self.__fields.copy()
