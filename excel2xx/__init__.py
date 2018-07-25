@@ -22,6 +22,7 @@ DEFINE_FIELDS = {
 
     'array':  fields.Array,
     'array<int>': fields.IntArray,
+    'array<float>': fields.FloatArray,
     'array<string>': fields.Array,
 
     'date': fields.Date,

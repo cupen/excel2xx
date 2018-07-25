@@ -58,6 +58,12 @@ class IntArray(Field):
         return list(map(int, _iter))
 
 
+class FloatArray(Field):
+    def format(self, v):
+        _iter = map(lambda x: x.strip(), v.split(","))
+        return list(map(float, _iter))
+
+
 class Auto(Field):
     def format(self, v):
         return v
