@@ -5,6 +5,7 @@ import re
 import xlrd
 from collections import OrderedDict
 from excel2xx import fields
+from typing import Optional
 
 __author__ = 'cupen'
 __email__ = 'xcupen@gmail.com'
@@ -66,7 +67,8 @@ class FieldMeta:
     def dataRowIdx(self):
         return self._lineNumCfg['data']
 
-    def parseFieldType(self, fieldType: str) -> str:
+    @classmethod
+    def parseFieldType(cls, fieldType: str) -> str:
         fieldType = fieldType.replace(" ", "")
         if fieldType.startswith("object") or fieldType.startswith("Object"):
             return "object"
@@ -74,6 +76,15 @@ class FieldMeta:
         if fieldType.startswith("array<object") or fieldType.startswith("array<Object"):
             return "array<object>"
         return fieldType
+
+    @classmethod
+    def parseField(cls, name: str, fieldType: str) -> Optional[fields.Field]:
+        name = cls.parseFieldType(fieldType)
+        meta = DEFINE_FIELDS.get(name)
+        if not meta:
+            return None
+        return meta(name, fieldType)
+
 
     def parseSheet(self, excel, sheet):
         if sheet.nrows < self.nameRowIdx + 1:

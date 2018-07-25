@@ -80,6 +80,7 @@ class DateTime(Field):
 
 
 class Object(Field):
+    Attr = namedtuple("Attr", ["name", "type"])
     def __init__(self, name, type, wb=None):
         super(Object, self).__init__(name, type, wb)
         self.attrs = self.parseType(text=type)
@@ -100,22 +101,29 @@ class Object(Field):
         attrs = []
         for attrDefine in attrDefs:
             tmpArr = attrDefine.split(":")
-            attr = namedtuple("Attr", ["name", "type"])
             if len(tmpArr) == 1:
-                attr.name = tmpArr[0].strip()
-                attr.type = str
-            if len(tmpArr) >= 2:
-                attr.name = tmpArr[0].strip()
-                attr.type = self.as_type(tmpArr[1])
-            attrs.append(attr)
+                name = tmpArr[0].strip()
+                type = str
+            elif len(tmpArr) >= 2:
+                name = tmpArr[0].strip()
+                type = self.as_type(tmpArr[1])
+            else:
+                raise Exception("Warning: Invalid fieldType=\"%s\" tmpArr=%s" % (text, tmpArr))
+                # print("Warning: Invalid fieldType %s" % text)
+                name = tmpArr[0].strip()
+                type = str
+
+            attrs.append(self.Attr(name=name, type=type))
             pass
         return attrs
 
     def parseValue(self, attrs, valText):
         vals = list(map(lambda x: x.strip(), valText.strip("{}<> ").split(",")))
         if len(vals) != len(self.attrs):
+            attrs = ",".join(map(str, self.attrs))
+
             raise Exception(
-                "Invalid object define. name:%s type:%s attrs:%s val:%s" % (self.name, self.type, self.attrs, valText))
+                "Invalid object define. name:%s type:%s attrs:[%s] val:%s" % (self.name, self.type, attrs, valText))
 
         d = OrderedDict()
         for i in range(0, len(vals)):
