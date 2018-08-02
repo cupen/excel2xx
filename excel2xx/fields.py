@@ -28,6 +28,8 @@ class Field:
             return str
         if typeName == "float":
             return float
+        if typeName == "ItemExpr":
+            return ItemExpr("as_type", typeName).format
         raise Exception("Invalid type %s" % typeName)
 
 
@@ -100,7 +102,7 @@ class Object(Field):
         if not text.startswith("object"):
             raise self.newException()
 
-        attrDefs = text.replace("object", "").replace(" ", "").strip("()").split(",")
+        attrDefs = text.replace("Object", "").replace("object", "").replace(" ", "").strip("()").split(",")
         if len(attrDefs) <= 0:
             raise self.newException()
 
