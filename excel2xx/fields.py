@@ -1,6 +1,7 @@
 # coding:utf-8
 from __future__ import unicode_literals, print_function
 
+import math
 import re
 from collections import namedtuple, OrderedDict
 
@@ -276,3 +277,55 @@ class Reward(ItemExpr):
         _iter = map(lambda x: x.strip(), v.split(";"))
         _iter = map(lambda x: self.parseItemExprWithWeight(x), _iter)
         return list(_iter)
+
+
+class BigNumber(Field):
+    """
+    Float64
+
+    BigNumber.setUnits(",K,M,G")
+    """
+
+    UNITS = {}
+    UNITS_IDX = {}
+    PARTERN = re.compile("(?P<count>\d+)(?P<unit>[a-zA-Z_]*)")
+    def newException(self, value, suffix=""):
+        return Exception("Invalid BigNumber. name:%s type:%s value:%s. suffix:%s" % (self.name, self.type, value, suffix))
+
+    @classmethod
+    def setUnits(cls, units, size=1000):
+        if isinstance(units, str):
+            units = map(lambda x: x.strip(), units.split(","))
+
+        idx = 0
+        _dict = {}
+        _dict2 = {}
+        for v in units:
+            idx += 1
+            _dict[v] = idx - 1
+            _dict2[v] = math.pow(size, idx)
+            pass
+
+        cls.UNITS_IDX = _dict
+        cls.UNITS = _dict2
+        pass
+
+    def format(self, v):
+        if isinstance(v, float):
+            return v
+
+        if not v or not isinstance(v, str):
+            raise self.newException(v)
+
+        _dict = self.PARTERN.match(v).groupdict()
+        if "count" not in _dict:
+            raise self.newException(v)
+        if "unit" not in _dict:
+            raise self.newException(v)
+        if _dict['unit'] not in self.UNITS:
+            raise self.newException(v, suffix=f"Invalid UNITS {self.UNITS}")
+        unit = 1
+        if _dict['unit'] != "":
+            unit = self.UNITS[_dict['unit']]
+        count = int(_dict["count"])
+        return float(count * unit)

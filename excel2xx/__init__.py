@@ -37,8 +37,11 @@ DEFINE_FIELDS = {
     'ItemExpr': fields.ItemExpr,
     'array<ItemExpr>': fields.ItemExprArray,
 
-
     'Reward': fields.Reward,
+    'reward': fields.Reward,
+
+    'bignumber': fields.BigNumber,
+    'BigNumber': fields.BigNumber,
 }
 
 
@@ -253,8 +256,8 @@ class Sheet:
                 try:
                     _dict[field.name] = field.format(cell.value)
                 except Exception as ex:
-                    print("Failed to parse the value:\"%s\" of Field(name=%s type=%s). row: %s col: %s" \
-                          %(cell.value, field.name, field.type, utils.show_row(rowNum), utils.show_col(i)))
+                    print("Failed to parse the value:\"%s\" of Field(name=%s type=%s). row: %s col: %s\n\t err: %s" \
+                          %(cell.value, field.name, field.type, utils.show_row(rowNum), utils.show_col(i), str(ex)))
                     pass
 
             yield _dict
