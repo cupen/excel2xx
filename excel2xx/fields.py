@@ -167,6 +167,7 @@ class ItemExpr(Field):
     NO_ID_PATTERN = {
         "coin": re.compile("coin-(?P<count__int>\d+)(?P<unit>[a-zA-Z_]*)")
     }
+    UNITS = {}
 
     def __init__(self, name, type, wb=None):
         super(ItemExpr, self).__init__(name, type, wb)
@@ -176,6 +177,20 @@ class ItemExpr(Field):
     def addNoIdType(cls, typeNmae, pattern=""):
         cls.NO_ID.add(typeNmae)
         if pattern: cls.NO_ID_PATTERN[typeNmae] = re.compile(pattern)
+        pass
+
+    @classmethod
+    def SetUnits(cls, units):
+        if isinstance(units, str):
+            units = map(lambda x: x.strip(), units.split(","))
+
+        idx = 0
+        _dict = {}
+        for v in units:
+            _dict[v] = idx
+            idx += 1
+            pass
+        cls.UNITS = _dict
         pass
 
     def newException(self, value):
@@ -214,6 +229,8 @@ class ItemExpr(Field):
                 pass
 
             _dict["type"] = _type
+            if "unit" in _dict:
+                _dict["unit"] = self.UNITS[_dict["unit"]]
             return _dict
 
         return {
