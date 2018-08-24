@@ -164,14 +164,18 @@ class ObjectArray(Object):
 
 class ItemExpr(Field):
     NO_ID = set()
+    NO_ID_PATTERN = {
+        "coin": re.compile("coin-(?P<count__int>\d+)(?P<unit>[a-zA-Z_]*)")
+    }
 
     def __init__(self, name, type, wb=None):
         super(ItemExpr, self).__init__(name, type, wb)
         pass
 
     @classmethod
-    def addNoIdType(cls, typeNmae):
+    def addNoIdType(cls, typeNmae, pattern=""):
         cls.NO_ID.add(typeNmae)
+        if pattern: cls.NO_ID_PATTERN[typeNmae] = re.compile(pattern)
         pass
 
     def newException(self, value):
@@ -180,6 +184,9 @@ class ItemExpr(Field):
     def format(self, v):
         if not isinstance(v, (str, list)):
             raise self.newException(v)
+
+        if v == "":
+            return None
 
         tmpArr = v
         if isinstance(tmpArr, str):
@@ -190,10 +197,24 @@ class ItemExpr(Field):
 
         _type = tmpArr[0]
         if _type in self.NO_ID:
-            return {
-                "type": _type,
-                "count": int(tmpArr[1]),
-            }
+            ptn = self.NO_ID_PATTERN.get(_type)
+            if not ptn:
+                return {
+                    "type": _type,
+                    "count": int(tmpArr[1]),
+                }
+                pass
+
+            _dict = ptn.match(v).groupdict()
+            for k, v in dict(_dict).items():
+                if "__" in k:
+                    newk, t = k.split("__", 2)
+                    _dict[newk] = self.as_type(t)(v)
+                    del _dict[k]
+                pass
+
+            _dict["type"] = _type
+            return _dict
 
         return {
             "type": _type,

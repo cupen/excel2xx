@@ -29,7 +29,7 @@ def toJson(excel, output, encoding='utf-8'):
         return
 
     with open(output, mode='w', encoding=encoding) as f:
-        json.dump(_dict, f, ensure_ascii=False, default=_defaultSerialize)
+        json.dump(_dict, f, ensure_ascii=False, indent=4, default=_defaultSerialize)
     pass
 
 
