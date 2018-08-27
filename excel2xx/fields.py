@@ -166,7 +166,7 @@ class ObjectArray(Object):
 class ItemExpr(Field):
     NO_ID = set()
     NO_ID_PATTERN = {
-        "coin": re.compile("coin-(?P<count__int>\d+)(?P<unit>[a-zA-Z_]*)")
+        # "coin": re.compile("coin-(?P<count__int>\d+)(?P<unit>[a-zA-Z_]*)")
     }
     UNITS = {}
 
@@ -181,13 +181,13 @@ class ItemExpr(Field):
         pass
 
     @classmethod
-    def SetUnits(cls, units):
-        if isinstance(units, str):
-            units = map(lambda x: x.strip(), units.split(","))
+    def setUnits(cls, units: str):
+        units = units.strip(" \n\r,")
+        units = "," + units
 
         idx = 0
         _dict = {}
-        for v in units:
+        for v in map(lambda x: x.strip(), units.split(",")):
             _dict[v] = idx
             idx += 1
             pass
@@ -294,6 +294,7 @@ class BigNumber(Field):
 
     @classmethod
     def setUnits(cls, units, size=1000):
+        units = units.strip(" \n\r,")
         if isinstance(units, str):
             units = map(lambda x: x.strip(), units.split(","))
 

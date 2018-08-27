@@ -7,6 +7,6 @@ __author__ = 'cupen'
 __email__ = 'xcupen@gmail.com'
 
 if __name__ == '__main__':
-    excel2xx.fields.BigNumber.setUnits(",K,M,G")
+    excel2xx.setUnits("K,M,G,T,P", size=1024)
     exit(excel2xx.main.main_docopt())
     pass

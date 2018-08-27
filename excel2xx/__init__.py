@@ -272,3 +272,9 @@ def addFieldType(typeName, parser):
 def delFieldType(typeName, parser):
     del DEFINE_FIELDS[typeName]
     pass
+
+def setUnits(text, size=1000):
+    fields.BigNumber.setUnits(text, size=size)
+    fields.ItemExpr.setUnits(text)
+    fields.ItemExpr.addNoIdType("coin", "coin-(?P<count__int>\d+)(?P<unit>[a-zA-Z_]*)")
+    pass
