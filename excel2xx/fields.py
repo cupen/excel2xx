@@ -163,6 +163,7 @@ class ObjectArray(Object):
             _list.append(obj)
         return _list
 
+
 class ItemExpr(Field):
     NO_ID = set()
     NO_ID_PATTERN = {
@@ -279,16 +280,22 @@ class Reward(ItemExpr):
         return list(_iter)
 
 
-class BigNumber(Field):
+class Number(Field):
     """
     Float64
 
-    BigNumber.setUnits(",K,M,G")
+    >>> n = Number("test", type="number")
+    >>> n.format("1K")
+    1024.0
+    >>> n.format("1.2K")
+    1228.8
+    >>> n.format("512.1048576M")
+    536980863.1627775
     """
 
     UNITS = {}
     UNITS_IDX = {}
-    PARTERN = re.compile("(?P<count>\d+)(?P<unit>[a-zA-Z_]*)")
+    PARTERN = re.compile("(?P<count>\d+\.?\d*)(?P<unit>[a-zA-Z_]*)")
     def newException(self, value, suffix=""):
         return Exception("Invalid BigNumber. name:%s type:%s value:%s. suffix:%s" % (self.name, self.type, value, suffix))
 
@@ -328,5 +335,8 @@ class BigNumber(Field):
         unit = 1
         if _dict['unit'] != "":
             unit = self.UNITS[_dict['unit']]
-        count = int(_dict["count"])
-        return float(count * unit)
+        count = float(_dict["count"])
+        return count * unit
+
+Number.setUnits("K,M,G,T,P,E", size=1024)
+BigNumber = Number
