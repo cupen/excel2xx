@@ -45,6 +45,10 @@ class String(Field):
 
 
 class Float(Field):
+    """
+    recommend using string, beacuse excel-float was'nt adhere IEEE 754.
+    @see https://support.microsoft.com/en-us/help/78113/floating-point-arithmetic-may-give-inaccurate-results-in-excel
+    """
     def format(self, v):
         return float(v)
 
@@ -176,9 +180,9 @@ class ItemExpr(Field):
         pass
 
     @classmethod
-    def addNoIdType(cls, typeNmae, pattern=""):
-        cls.NO_ID.add(typeNmae)
-        if pattern: cls.NO_ID_PATTERN[typeNmae] = re.compile(pattern)
+    def addNoIdType(cls, typeName, pattern=""):
+        cls.NO_ID.add(typeName)
+        if pattern: cls.NO_ID_PATTERN[typeName] = re.compile(pattern)
         pass
 
     @classmethod
@@ -214,26 +218,29 @@ class ItemExpr(Field):
 
         _type = tmpArr[0]
         if _type in self.NO_ID:
-            ptn = self.NO_ID_PATTERN.get(_type)
-            if not ptn:
-                return {
-                    "type": _type,
-                    "count": int(tmpArr[1]),
-                }
-                pass
-
-            _dict = ptn.match(v).groupdict()
-            for k, v in dict(_dict).items():
-                if "__" in k:
-                    newk, t = k.split("__", 2)
-                    _dict[newk] = self.as_type(t)(v)
-                    del _dict[k]
-                pass
-
-            _dict["type"] = _type
-            if "unit" in _dict:
-                _dict["unit"] = self.UNITS[_dict["unit"]]
-            return _dict
+            # ptn = self.NO_ID_PATTERN.get(_type)
+            # if not ptn:
+            #     return {
+            #         "type": _type,
+            #         "count": int(tmpArr[1]),
+            #     }
+            #     pass
+            return {
+                "type": _type,
+                "count": Number(self.type, self.name).format(tmpArr[1])
+            }
+            # _dict = ptn.match(v).groupdict()
+            # for k, v in dict(_dict).items():
+            #     if "__" in k:
+            #         newk, t = k.split("__", 2)
+            #         _dict[newk] = self.as_type(t)(v)
+            #         del _dict[k]
+            #     pass
+            #
+            # _dict["type"] = _type
+            # if "unit" in _dict:
+            #     _dict["unit"] = self.UNITS[_dict["unit"]]
+            # return _dict
 
         return {
             "type": _type,
@@ -330,7 +337,7 @@ class Number(Field):
             raise self.newException(v)
         if "unit" not in _dict:
             raise self.newException(v)
-        if _dict['unit'] not in self.UNITS:
+        if _dict['unit'] and _dict['unit'] not in self.UNITS:
             raise self.newException(v, suffix=f"Invalid UNITS {self.UNITS}")
         unit = 1
         if _dict['unit'] != "":
