@@ -279,6 +279,8 @@ class Reward(ItemExpr):
         }
 
     def format(self, v):
+        if not v:
+            return []
         if not isinstance(v, str):
             raise self.newException(v)
 
