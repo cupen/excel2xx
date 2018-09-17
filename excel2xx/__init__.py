@@ -2,6 +2,8 @@
 from __future__ import unicode_literals, print_function
 import os
 import re
+import types
+
 import xlrd
 from collections import OrderedDict
 from excel2xx import fields, utils
@@ -105,7 +107,7 @@ class FieldMeta:
 
             fieldMeta = DEFINE_FIELDS.get(self.parseFieldType(fieldType))
             if not fieldMeta:
-                raise RuntimeError('Unexist field meta "%s". check the field(%s)' % (fieldType, repr(typeRow[i])))
+                raise RuntimeError('%-12s : Unexist field meta "%s". check the field(%s)' % (excel.fname, fieldType, repr(typeRow[i])))
 
             fields[fieldName] = fieldMeta(fieldName, fieldType, excel)
             i += 1
@@ -128,6 +130,18 @@ class Excel:
     @property
     def datemode(self):
         return self.__wb.datemode
+
+    @property
+    def fname(self):
+        if isinstance(self.__filePath, str):
+            return os.path.basename(self.__filePath)
+
+        with open("/dev/null") as f:
+            fileType = type(f)
+            if isinstance(self.__filePath, fileType):
+                return self.__filePath.name
+
+        return ""
 
     def getSheet(self, sheetName, alias=''):
         sheet = None
@@ -241,6 +255,10 @@ class Sheet:
         import pandas
         return pandas.DataFrame(self, columns=self.fields().keys())
 
+    @property
+    def fname(self):
+        return self.__excel.fname
+
     def __iter__(self):
         fields = self.fields()
         fieldsArr = tuple(fields.values())
@@ -256,8 +274,8 @@ class Sheet:
                 try:
                     _dict[field.name] = field.format(cell.value)
                 except Exception as ex:
-                    print("Failed to parse the value:\"%s\" of Field(name=%s type=%s). row: %s col: %s\n\t err: %s" \
-                          %(cell.value, field.name, field.type, utils.show_row(rowNum), utils.show_col(i), str(ex)))
+                    print("%-12s : Failed to parse the value:\"%s\" of Field(name=%s type=%s). row: %s col: %s\n\t err: %s" \
+                          %(self.fname,  cell.value, field.name, field.type, utils.show_row(rowNum), utils.show_col(i), str(ex)))
                     pass
 
             yield _dict
