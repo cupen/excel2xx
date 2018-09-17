@@ -55,18 +55,21 @@ class Float(Field):
 
 class Array(Field):
     def format(self, v):
+        if not v: return []
         _iter = map(lambda x: x.strip(), v.split(","))
         return list(_iter)
 
 
 class IntArray(Field):
     def format(self, v):
+        if not v: return []
         _iter = map(lambda x: x.strip(), v.split(","))
         return list(map(int, _iter))
 
 
 class FloatArray(Field):
     def format(self, v):
+        if not v: return []
         _iter = map(lambda x: x.strip(), v.split(","))
         return list(map(float, _iter))
 
@@ -161,6 +164,8 @@ class ObjectArray(Object):
         return Exception("Invalid array<object> define. name:%s type:%s attrs:%s" % (self.name, self.type, self.attrs))
 
     def format(self, v):
+        if not v: return []
+        
         _list = []
         for tmpVal in self.pattern.findall(v):
             obj = super(ObjectArray, self).format(tmpVal.strip())
@@ -257,6 +262,7 @@ class ItemExprArray(ItemExpr):
         if not isinstance(v, str):
             raise self.newException(v)
 
+        if not v: return []
         _iter = map(lambda x: x.strip(), v.split(","))
         _iter = map(lambda x: super(ItemExprArray, self).format(x), _iter)
         return list(_iter)
