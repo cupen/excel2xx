@@ -134,6 +134,7 @@ class Object(Field):
         return attrs
 
     def parseValue(self, attrs, valText):
+        if not valText: return None
         vals = list(map(lambda x: x.strip(), valText.strip("{}<> ").split(",")))
         if len(vals) != len(self.attrs):
             attrs = ",".join(map(str, self.attrs))
