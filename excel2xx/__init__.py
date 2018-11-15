@@ -217,22 +217,25 @@ class Sheet:
 
     def firstFieldName(self):
         fields = self.fields()
-        for fieldName  in fields:
+        for fieldName in fields:
             return fieldName
         return None
+
+    def throwException(self, text):
+        raise Exception(f"Sheet(name={self.name}): {text}")
 
     def toDict(self, valueIsList=False):
         _dict = OrderedDict()
         firstField = self.firstFieldName()
         if not firstField:
-            raise Exception("Invalid first field name. %s" % firstField)
+            return self.throwException(f"Invalid first field name. \"{firstField}\"")
         for row in self:
             if not row:
                 continue
 
             value = row[firstField]
             if (not valueIsList) and (value in _dict):
-                raise Exception("Duplicate value of field name. %s=%s" % (firstField, value))
+                return self.throwException("Duplicate value of field name. %s=%s" % (firstField, value))
             _dict[value] = row
         return _dict
 
@@ -240,7 +243,7 @@ class Sheet:
         _dict = OrderedDict()
         firstField = self.firstFieldName()
         if not firstField:
-            raise Exception("Invalid first field name. %s" % firstField)
+            return self.throwException("Invalid first field name. %s" % firstField)
         for row in self:
             if not row:
                 continue
