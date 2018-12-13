@@ -224,29 +224,10 @@ class ItemExpr(Field):
 
         _type = tmpArr[0]
         if _type in self.NO_ID:
-            # ptn = self.NO_ID_PATTERN.get(_type)
-            # if not ptn:
-            #     return {
-            #         "type": _type,
-            #         "count": int(tmpArr[1]),
-            #     }
-            #     pass
             return {
                 "type": _type,
                 "count": Number(self.type, self.name).format(tmpArr[1])
             }
-            # _dict = ptn.match(v).groupdict()
-            # for k, v in dict(_dict).items():
-            #     if "__" in k:
-            #         newk, t = k.split("__", 2)
-            #         _dict[newk] = self.as_type(t)(v)
-            #         del _dict[k]
-            #     pass
-            #
-            # _dict["type"] = _type
-            # if "unit" in _dict:
-            #     _dict["unit"] = self.UNITS[_dict["unit"]]
-            # return _dict
 
         return {
             "type": _type,

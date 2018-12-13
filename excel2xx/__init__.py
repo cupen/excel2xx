@@ -105,6 +105,8 @@ class FieldMeta:
             fieldName = str(nameRow[i].value).strip()
             fieldType = str(typeRow[i].value).strip()
 
+            if not fieldName or fieldName.startswith("#"):
+                continue
             fieldMeta = DEFINE_FIELDS.get(self.parseFieldType(fieldType))
             if not fieldMeta:
                 raise RuntimeError('%-12s : Unexist field meta "%s". check the field(%s)' % (excel.fname, fieldType, repr(typeRow[i])))
