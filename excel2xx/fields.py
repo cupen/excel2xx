@@ -39,6 +39,20 @@ class Int(Field):
         return int(v)
 
 
+class Bool(Field):
+    TRUE_VALUES = [1, 1.0, "true"]
+    FALSE_VALUES = [0, 0.0, "false"]
+
+    def format(self, v):
+        # print(f"{type(v)}: {v}", end="")
+        if v in self.TRUE_VALUES:
+            return True
+        if v in self.FALSE_VALUES:
+            return False
+        raise Exception(f"Invalid BoolValue: {type(v)}:({v})")
+        pass
+
+
 class String(Field):
     def format(self, v):
         return str(v)

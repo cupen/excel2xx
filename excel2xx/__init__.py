@@ -16,6 +16,7 @@ DEFINE_FIELDS = {
     '':       fields.Auto,
     'auto':   fields.Auto,
 
+    'bool':    fields.Bool,
     'int':    fields.Int,
     'number': fields.Int,
     'float':  fields.Float,
