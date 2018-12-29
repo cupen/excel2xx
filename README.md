@@ -1,6 +1,6 @@
 # 简介
-提取 Excel 里的数据，导出为各种结构化的文本。除了提供命令行下的可执行脚本外也提供了
- Python API，但后续版本的兼容性不作绝对保证，请自备智慧与勇气。
+提取 Excel 数据，导出为各种结构化的文本。除了提供命令行下的可执行脚本外也提供了
+ Python API 方便做复杂的脚本编程。
 
 
 # 繁介
@@ -17,7 +17,7 @@
 
 # 运行依赖
 
-  * Python2 or Python3
+  * Python3.6+
 
 # 安装
 ```
@@ -33,14 +33,11 @@ $ excel2xx mako example/test.xls  -o example/test.lua --template example/test.ma
 ```
 
 # TODO
-
- - [x] Python2.7 Support
- - [ ] Simple DSL
  - [ ] Export to Lua code :stuck_out_tongue_winking_eye:
  - [ ] Export to SQL code :stuck_out_tongue_winking_eye:
 
 # 支持
-<mailto:cupen@foxmail.com> :scream: noooooo!
+<mailto:xcupen@gmail.com> :scream: noooooo!
 
 # LICENCE  
 <a href="http://www.wtfpl.net/">
