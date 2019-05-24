@@ -55,7 +55,11 @@ class Bool(Field):
 
 class String(Field):
     def format(self, v):
-        return str(v)
+        v = str(v)
+        v = v.replace("\\r\\n", "\n")
+        v = v.replace("\\n", "\n")
+        v = v.replace("\\r", "\n")
+        return v
 
 
 class Float(Field):
