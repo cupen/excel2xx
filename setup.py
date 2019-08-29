@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='excel2xx',
-    version="0.2.1",
+    version="0.3.0",
     packages=['excel2xx'],
     url='https://github.com/cupen/excel2xx',
     license='WTFPL',

@@ -1,6 +1,7 @@
 # coding:utf-8
 from __future__ import unicode_literals, print_function
 
+import datetime
 import math
 import re
 from collections import namedtuple, OrderedDict
@@ -95,6 +96,24 @@ class FloatArray(Field):
 class Auto(Field):
     def format(self, v):
         return v
+
+
+class Date2(Field):
+    FORMAT = "%Y-%m-%d"
+    def format(self, v):
+        return datetime.datetime.strptime(v, self.FORMAT)
+
+
+class DateTime2(Field):
+    FORMAT = "%Y-%m-%dT%H:%M:%S%z"
+    def format(self, v):
+        return datetime.datetime.strptime(v, self.FORMAT)
+
+
+class UnixStamp(DateTime2):
+    def format(self, v):
+        dt = super().format(v)
+        return int(dt.timestamp() * 1000)
 
 
 class Date(Field):

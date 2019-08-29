@@ -30,6 +30,7 @@ DEFINE_FIELDS = {
 
     'date': fields.Date,
     'datetime': fields.DateTime,
+    'unixstamp': fields.UnixStamp,
 
     'object': fields.Object,
     'array<object>': fields.ObjectArray,
