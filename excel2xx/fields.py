@@ -173,15 +173,17 @@ class Object(Field):
     def parseValue(self, attrs, valText):
         if not valText: return None
         vals = list(map(lambda x: x.strip(), valText.strip("{}<> ").split(",")))
-        if len(vals) != len(self.attrs):
+        if len(vals) < len(self.attrs) - 1:
             attrs = ",".join(map(str, self.attrs))
-
             raise Exception(
                 "Invalid object define. name:%s type:%s attrs:[%s] val:%s" % (self.name, self.type, attrs, valText))
 
         d = OrderedDict()
-        for i in range(0, len(vals)):
+        for i in range(len(vals)):
             attr = attrs[i]
+            # if i >= len(vals):
+            #     d[attr.name] = attr.type()
+            #     continue
             d[attr.name] = attr.type(vals[i])
             pass
         return d
