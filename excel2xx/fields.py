@@ -5,6 +5,7 @@ import datetime
 import math
 import re
 from collections import namedtuple, OrderedDict
+from pprint import pformat
 
 from xlrd.xldate import xldate_as_datetime
 
@@ -130,6 +131,19 @@ class DateTime(Field):
             return xldate_as_datetime(v, self.wb.datemode)
         except:
             return None
+
+
+class Map(Field):
+    def format(self, v:str) -> dict:
+        rs = {}
+        m = filter(lambda x: bool(x), v.split("\n"))
+        for line in m:
+            arr = line.split(":", maxsplit=1)
+            if len(arr) != 2:
+                raise Exception(f"Invalid map item {pformat(line)}")
+            arr = list(map(lambda x: x.strip(), arr))
+            rs[arr[0]] = arr[1]
+        return rs
 
 
 class Object(Field):

@@ -28,6 +28,9 @@ DEFINE_FIELDS = {
     'array<float>': fields.FloatArray,
     'array<string>': fields.Array,
 
+    'map<string,string>': fields.Map,
+    'map<string, string>': fields.Map,
+
     'date': fields.Date,
     'datetime': fields.DateTime,
     'unixstamp': fields.UnixStamp,
