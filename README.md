@@ -72,7 +72,7 @@ $ excel2xx mako example/test.xls  -o example/test.lua --template example/test.ma
             DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
                     Version 2, December 2004
 
- Copyright (C) 2014-2020 cupen<xcupen@gmail.com>
+ Copyright (C) 2014-2021 cupen<xcupen@gmail.com>
 
  Everyone is permitted to copy and distribute verbatim or modified
  copies of this license document, and changing it is allowed as long
