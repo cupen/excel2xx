@@ -8,9 +8,6 @@ from mako.template import Template
 from io import open
 from datetime import datetime, date
 
-__author__ = 'cupen'
-__email__ = 'xcupen@gmail.com'
-
 
 def _defaultSerialize(obj):
     if isinstance(obj, (datetime, date)):

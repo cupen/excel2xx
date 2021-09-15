@@ -1,16 +1,15 @@
 # encoding: utf-8
 from __future__ import unicode_literals, print_function
 import os
-import re
-import types
-
+from typing import Optional
 import xlrd
 from collections import OrderedDict
 from excel2xx import fields, utils
-from typing import Optional
 
+VERSION = "0.6.0"
 __author__ = 'cupen'
 __email__ = 'xcupen@gmail.com'
+
 
 DEFINE_FIELDS = {
     '':       fields.Auto,
@@ -304,5 +303,4 @@ def delFieldType(typeName, parser):
 def setUnits(text, size=1000):
     fields.BigNumber.setUnits(text, size=size)
     fields.ItemExpr.setUnits(text)
-    fields.ItemExpr.addNoIdType("coin", "coin-(?P<count__int>\d+)(?P<unit>[a-zA-Z_]*)")
     pass

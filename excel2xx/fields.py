@@ -9,8 +9,6 @@ from pprint import pformat
 
 from xlrd.xldate import xldate_as_datetime
 
-__author__ = 'cupen'
-__email__ = 'xcupen@gmail.com'
 
 class Field:
     def __init__(self, name, type, wb=None):
@@ -228,20 +226,54 @@ class ObjectArray(Object):
 
 
 class ItemExpr(Field):
-    NO_ID = set()
-    NO_ID_PATTERN = {
-        # "coin": re.compile("coin-(?P<count__int>\d+)(?P<unit>[a-zA-Z_]*)")
-    }
-    UNITS = {}
+    parseFuncs = {}
+
+    @staticmethod
+    def Default(arr):
+        if len(arr) < 2 or len(arr) > 3:
+            raise Exception(f"invalid itemexpr. {arr}")
+        return {
+            "type": arr[0],
+            "id": arr[1],
+            "count": int(arr[2]) if len(arr) >= 3 else 1
+        }
+
+    @staticmethod
+    def OnlyID(arr):
+        if len(arr) < 2:
+            raise Exception(f"invalid itemexpr-OnlyID. {arr}")
+        if len(arr) >= 3 and arr[2] != "1":
+            raise Exception(f"invalid itemexpr-OnlyID. {arr}")
+        return {
+            "type": arr[0],
+            "id": arr[1],
+            "count": 1
+        }
+
+    @staticmethod
+    def OnlyCount(arr):
+        if len(arr) != 2:
+            raise Exception(f"invalid itemexpr-OnlyCount. {arr}")
+        return {"type": arr[0], "count": int(arr[1])}
+
+    @staticmethod
+    def FloatCount(arr):
+        if len(arr) != 2:
+            raise Exception(f"invalid itemexpr-FloatCount. {arr}")
+        return {
+            "type": arr[0],
+            "count": Number("", "").format(arr[1])
+        }
 
     def __init__(self, name, type, wb=None):
         super(ItemExpr, self).__init__(name, type, wb)
         pass
 
     @classmethod
-    def addNoIdType(cls, typeName, pattern=""):
-        cls.NO_ID.add(typeName)
-        if pattern: cls.NO_ID_PATTERN[typeName] = re.compile(pattern)
+    def register(cls, name, parseFunc):
+        if name in cls.parseFuncs:
+            raise Exception(f"already registered. name:{name} parseFunc:{parseFunc}")
+        cls.parseFuncs[name] = parseFunc
         pass
 
     @classmethod
@@ -276,17 +308,8 @@ class ItemExpr(Field):
             raise self.newException(v)
 
         _type = tmpArr[0]
-        if _type in self.NO_ID:
-            return {
-                "type": _type,
-                "count": Number(self.type, self.name).format(tmpArr[1])
-            }
-
-        return {
-            "type": _type,
-            "id": tmpArr[1],
-            "count": int(tmpArr[2]) if len(tmpArr) >= 3 else 1
-        }
+        parseFunc = self.parseFuncs.get(_type, ItemExpr.Default)
+        return parseFunc(tmpArr)
 
 
 class ItemExprArray(ItemExpr):

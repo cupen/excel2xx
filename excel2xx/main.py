@@ -24,9 +24,6 @@ import traceback
 from docopt import docopt
 from excel2xx import Excel, export, FieldMeta
 
-__author__ = 'cupen'
-__email__ = "xcupen@gmail.com"
-
 
 def main(args):
     excelFile = args['<excel>']

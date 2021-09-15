@@ -1,3 +1,17 @@
+root_dir:=$(CURDIR)
+python_venv:=$(root_dir)/.venv
+python:=$(python_venv)/bin/python
+
+
+init:
+	python -m venv $(python_venv)
+
+
+reinit:
+	rm -fr $(python_venv)
+	make init
+	
+
 build: clean
 	python setup.py sdist bdist_wheel
 
