@@ -1,5 +1,11 @@
 # encoding: utf-8
-from __future__ import unicode_literals, print_function
+import os, sys
+debug = os.environ.get("EXCEL2XX_DEBUG", 0)
+if debug:
+    print("sys.path:")
+    for path in sys.path:
+        print("\t" + path)
+
 import excel2xx.main
 import excel2xx.fields
 

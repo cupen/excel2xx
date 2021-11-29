@@ -46,6 +46,9 @@ DEFINE_FIELDS = {
     'Reward': fields.Reward,
     'reward': fields.Reward,
 
+    'Ratio': fields.Ratio,
+    'ratio': fields.Ratio,
+
     'bignumber': fields.BigNumber,
     'BigNumber': fields.BigNumber,
 }

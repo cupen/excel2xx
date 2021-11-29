@@ -85,6 +85,20 @@ class IntArray(Field):
         return list(map(int, _iter))
 
 
+class Ratio(Field):
+    def format(self, v):
+        try:
+            if not v:
+                raise Exception(f"empty value")
+            arr = v.split(":")
+            if len(arr) != 2:
+                raise Exception("it must be two numbers.")
+            _iter = map(lambda x: x.strip(), arr)
+            return list(map(int, _iter))
+        except Exception as ex:
+            raise Exception(f"invalid Ratio: {v}. err:{ex}")
+
+
 class FloatArray(Field):
     def format(self, v):
         if not v: return []

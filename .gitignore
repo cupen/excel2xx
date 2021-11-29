@@ -1,5 +1,6 @@
 /.*
 /build
+/*/build
 /dist
 *.egg-info
 
@@ -11,3 +12,4 @@
 *.json
 *.lua
 *.msgpack
+.~*.xlsx
