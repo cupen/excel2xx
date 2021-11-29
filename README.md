@@ -53,9 +53,9 @@ for row in sheet:
 
 ## CLI 示例
 ```
-$ excel2xx json example/test.xls  -o example/test.json
-$ excel2xx msgpack example/test.xls --output example/test.msgp
-$ excel2xx mako example/test.xls  -o example/test.lua --template example/test.mako
+$ excel2xx json example/test.xls    -o example/test.json
+$ excel2xx msgpack example/test.xls -o example/test.msgpack
+$ excel2xx mako example/test.xls    -o example/test.lua  --template example/test.lua.mako
 ```
 
 
