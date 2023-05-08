@@ -49,6 +49,11 @@ $ pip install excel2xx
 
 # 使用
 
+## Excel 数据表 
+![eg1](assets/eg1.jpg)
+![eg2](assets/eg2.jpg)
+![eg3](assets/eg3.jpg)
+
 ## Python API示例（推荐）
 
 * 读取 excel sheet
@@ -84,7 +89,7 @@ $ pip install excel2xx
     ```
 
 
-## CLI 示例
+## CLI 示例（即将作废）
 ```
 $ excel2xx json example/test.xls    -o example/test.json
 $ excel2xx msgpack example/test.xls -o example/test.msgpack
@@ -107,7 +112,7 @@ $ excel2xx mako example/test.xls    -o example/test.lua  --template example/test
             DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
                     Version 2, December 2004
 
- Copyright (C) 2014-2021 cupen<xcupen@gmail.com>
+ Copyright (C) 2014-2023 cupen<xcupen@gmail.com>
 
  Everyone is permitted to copy and distribute verbatim or modified
  copies of this license document, and changing it is allowed as long
