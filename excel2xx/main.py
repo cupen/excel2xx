@@ -26,24 +26,28 @@ from excel2xx import Excel, export, FieldMeta
 
 
 def main(args):
-    excelFile = args['<excel>']
-    outputFile = args['--output']
+    excelFile = args["<excel>"]
+    outputFile = args["--output"]
 
-    if excelFile: excelFile = os.path.realpath(excelFile)
-    if outputFile: outputFile = os.path.realpath(outputFile)
+    if excelFile:
+        excelFile = os.path.realpath(excelFile)
+    if outputFile:
+        outputFile = os.path.realpath(outputFile)
 
     if not os.path.isfile(excelFile):
-        print('Unexist file:' + excelFile)
+        print("Unexist file:" + excelFile)
         return 1
 
     excel = Excel(excelFile, fieldMeta=FieldMeta())
 
-    if args['json']:
-        export.toJson(excel, args['--output'] or "%(excelFile)s.json"%locals())
-    elif args['msgpack']:
-        export.toMsgPack(excel, args['--output'] or "%(excelFile)s.json"%locals())
-    elif args['mako']:
-        export.toMako(excel, args['--output'] or "%(--template)s.mako"%args, args['--template'])
+    if args["json"]:
+        export.toJson(excel, args["--output"] or "%(excelFile)s.json" % locals())
+    elif args["msgpack"]:
+        export.toMsgPack(excel, args["--output"] or "%(excelFile)s.json" % locals())
+    elif args["mako"]:
+        export.toMako(
+            excel, args["--output"] or "%(--template)s.mako" % args, args["--template"]
+        )
     else:
         print("Invalid subcmd.")
         return 2
@@ -53,15 +57,16 @@ def main(args):
 
 def main_docopt():
     args = docopt(__doc__)
-    if args['--verbose2']: print(args)
+    if args["--verbose2"]:
+        print(args)
     try:
         return main(args)
     except Exception as e:
-        errorMsg = traceback.format_exc() if args['--verbose'] else e
+        errorMsg = traceback.format_exc() if args["--verbose"] else e
         print(errorMsg)
         return 2
     pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     exit(main_docopt())

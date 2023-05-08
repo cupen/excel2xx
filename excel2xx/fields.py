@@ -13,7 +13,7 @@ from xlrd.xldate import xldate_as_datetime
 class Field:
     def __init__(self, name, type, wb=None):
         self.name = name
-        self.type= type
+        self.type = type
         self.wb = wb
         pass
 
@@ -67,20 +67,23 @@ class Float(Field):
     recommend using string, beacuse excel-float was'nt adhere IEEE 754.
     @see https://support.microsoft.com/en-us/help/78113/floating-point-arithmetic-may-give-inaccurate-results-in-excel
     """
+
     def format(self, v):
         return float(v)
 
 
 class Array(Field):
     def format(self, v):
-        if not v: return []
+        if not v:
+            return []
         _iter = map(lambda x: x.strip(), v.split(","))
         return list(_iter)
 
 
 class IntArray(Field):
     def format(self, v):
-        if not v: return []
+        if not v:
+            return []
         _iter = map(lambda x: x.strip(), v.split(","))
         return list(map(int, _iter))
 
@@ -101,7 +104,8 @@ class Ratio(Field):
 
 class FloatArray(Field):
     def format(self, v):
-        if not v: return []
+        if not v:
+            return []
         _iter = map(lambda x: x.strip(), v.split(","))
         return list(map(float, _iter))
 
@@ -113,12 +117,14 @@ class Auto(Field):
 
 class Date2(Field):
     FORMAT = "%Y-%m-%d"
+
     def format(self, v):
         return datetime.datetime.strptime(v, self.FORMAT)
 
 
 class DateTime2(Field):
     FORMAT = "%Y-%m-%dT%H:%M:%S%z"
+
     def format(self, v):
         return datetime.datetime.strptime(v, self.FORMAT)
 
@@ -146,7 +152,7 @@ class DateTime(Field):
 
 
 class Map(Field):
-    def format(self, v:str) -> dict:
+    def format(self, v: str) -> dict:
         rs = {}
         m = filter(lambda x: bool(x), v.split("\n"))
         for line in m:
@@ -160,20 +166,30 @@ class Map(Field):
 
 class Object(Field):
     Attr = namedtuple("Attr", ["name", "type"])
+
     def __init__(self, name, type, wb=None):
         super(Object, self).__init__(name, type, wb)
         self.attrs = self.parseType(text=type)
         pass
 
     def newException(self):
-        return Exception("Invalid object define. name:%s type:%s attrs:%s" % (self.name, self.type, self.attrs))
+        return Exception(
+            "Invalid object define. name:%s type:%s attrs:%s"
+            % (self.name, self.type, self.attrs)
+        )
 
     def parseType(self, text):
         text = text.strip()
         if not text.startswith("object"):
             raise self.newException()
 
-        attrDefs = text.replace("Object", "").replace("object", "").replace(" ", "").strip("()").split(",")
+        attrDefs = (
+            text.replace("Object", "")
+            .replace("object", "")
+            .replace(" ", "")
+            .strip("()")
+            .split(",")
+        )
         if len(attrDefs) <= 0:
             raise self.newException()
 
@@ -187,7 +203,9 @@ class Object(Field):
                 name = tmpArr[0].strip()
                 type = self.as_type(tmpArr[1])
             else:
-                raise Exception("Warning: Invalid fieldType=\"%s\" tmpArr=%s" % (text, tmpArr))
+                raise Exception(
+                    'Warning: Invalid fieldType="%s" tmpArr=%s' % (text, tmpArr)
+                )
                 # print("Warning: Invalid fieldType %s" % text)
                 name = tmpArr[0].strip()
                 type = str
@@ -197,12 +215,15 @@ class Object(Field):
         return attrs
 
     def parseValue(self, attrs, valText):
-        if not valText: return None
+        if not valText:
+            return None
         vals = list(map(lambda x: x.strip(), valText.strip("{}<> ").split(",")))
         if len(vals) < len(self.attrs) - 1:
             attrs = ",".join(map(str, self.attrs))
             raise Exception(
-                "Invalid object define. name:%s type:%s attrs:[%s] val:%s" % (self.name, self.type, attrs, valText))
+                "Invalid object define. name:%s type:%s attrs:[%s] val:%s"
+                % (self.name, self.type, attrs, valText)
+            )
 
         d = OrderedDict()
         for i in range(len(vals)):
@@ -227,11 +248,15 @@ class ObjectArray(Object):
         pass
 
     def newException(self):
-        return Exception("Invalid array<object> define. name:%s type:%s attrs:%s" % (self.name, self.type, self.attrs))
+        return Exception(
+            "Invalid array<object> define. name:%s type:%s attrs:%s"
+            % (self.name, self.type, self.attrs)
+        )
 
     def format(self, v):
-        if not v: return []
-        
+        if not v:
+            return []
+
         _list = []
         for tmpVal in self.pattern.findall(v):
             obj = super(ObjectArray, self).format(tmpVal.strip())
@@ -249,7 +274,7 @@ class ItemExpr(Field):
         return {
             "type": arr[0],
             "id": arr[1],
-            "count": int(arr[2]) if len(arr) >= 3 else 1
+            "count": int(arr[2]) if len(arr) >= 3 else 1,
         }
 
     @staticmethod
@@ -258,11 +283,7 @@ class ItemExpr(Field):
             raise Exception(f"invalid itemexpr-OnlyID. {arr}")
         if len(arr) >= 3 and arr[2] != "1":
             raise Exception(f"invalid itemexpr-OnlyID. {arr}")
-        return {
-            "type": arr[0],
-            "id": arr[1],
-            "count": 1
-        }
+        return {"type": arr[0], "id": arr[1], "count": 1}
 
     @staticmethod
     def OnlyCount(arr):
@@ -274,10 +295,7 @@ class ItemExpr(Field):
     def FloatCount(arr):
         if len(arr) != 2:
             raise Exception(f"invalid itemexpr-FloatCount. {arr}")
-        return {
-            "type": arr[0],
-            "count": Number("", "").format(arr[1])
-        }
+        return {"type": arr[0], "count": Number("", "").format(arr[1])}
 
     def __init__(self, name, type, wb=None):
         super(ItemExpr, self).__init__(name, type, wb)
@@ -305,7 +323,9 @@ class ItemExpr(Field):
         pass
 
     def newException(self, value):
-        return Exception("Invalid ItemExpr. name:%s type:%s value:%s" % (self.name, self.type, value))
+        return Exception(
+            "Invalid ItemExpr. name:%s type:%s value:%s" % (self.name, self.type, value)
+        )
 
     def format(self, v):
         if not isinstance(v, (str, list)):
@@ -328,13 +348,17 @@ class ItemExpr(Field):
 
 class ItemExprArray(ItemExpr):
     def newException(self, value):
-        return Exception("Invalid Array<ItemExpr>. name:%s type:%s value:%s" % (self.name, self.type, value))
+        return Exception(
+            "Invalid Array<ItemExpr>. name:%s type:%s value:%s"
+            % (self.name, self.type, value)
+        )
 
     def format(self, v):
         if not isinstance(v, str):
             raise self.newException(v)
 
-        if not v: return []
+        if not v:
+            return []
         _iter = map(lambda x: x.strip(), v.split(","))
         _iter = map(lambda x: super(ItemExprArray, self).format(x), _iter)
         return list(_iter)
@@ -342,7 +366,10 @@ class ItemExprArray(ItemExpr):
 
 class Reward(ItemExpr):
     def newException(self, value):
-        return Exception("Invalid Array<ItemExpr>. name:%s type:%s value:%s" % (self.name, self.type, value))
+        return Exception(
+            "Invalid Array<ItemExpr>. name:%s type:%s value:%s"
+            % (self.name, self.type, value)
+        )
 
     def parseItemExprWithWeight(self, expr_w):
         tmpArr = expr_w.split(",")
@@ -383,8 +410,12 @@ class Number(Field):
     UNITS = {}
     UNITS_IDX = {}
     PARTERN = re.compile("(?P<count>\d+\.?\d*)(?P<unit>[a-zA-Z_]*)")
+
     def newException(self, value, suffix=""):
-        return Exception("Invalid BigNumber. name:%s type:%s value:%s. suffix:%s" % (self.name, self.type, value, suffix))
+        return Exception(
+            "Invalid BigNumber. name:%s type:%s value:%s. suffix:%s"
+            % (self.name, self.type, value, suffix)
+        )
 
     @classmethod
     def setUnits(cls, units, size=1000):
@@ -417,13 +448,14 @@ class Number(Field):
             raise self.newException(v)
         if "unit" not in _dict:
             raise self.newException(v)
-        if _dict['unit'] and _dict['unit'] not in self.UNITS:
+        if _dict["unit"] and _dict["unit"] not in self.UNITS:
             raise self.newException(v, suffix=f"Invalid UNITS {self.UNITS}")
         unit = 1
-        if _dict['unit'] != "":
-            unit = self.UNITS[_dict['unit']]
+        if _dict["unit"] != "":
+            unit = self.UNITS[_dict["unit"]]
         count = float(_dict["count"])
         return count * unit
+
 
 Number.setUnits("K,M,G,T,P,E", size=1024)
 BigNumber = Number

@@ -7,50 +7,40 @@ from collections import OrderedDict
 from excel2xx import fields, utils
 
 VERSION = "0.6.0"
-__author__ = 'cupen'
-__email__ = 'xcupen@gmail.com'
+__author__ = "cupen"
+__email__ = "xcupen@gmail.com"
 
 
 DEFINE_FIELDS = {
-    '':       fields.Auto,
-    'auto':   fields.Auto,
-
-    'bool':    fields.Bool,
-    'int':    fields.Int,
-    'number': fields.Int,
-    'float':  fields.Float,
-    'str':    fields.String,
-    'string': fields.String,
-
-    'array':  fields.Array,
-    'array<int>': fields.IntArray,
-    'array<float>': fields.FloatArray,
-    'array<string>': fields.Array,
-
-    'map<string,string>': fields.Map,
-    'map<string, string>': fields.Map,
-
-    'date': fields.Date,
-    'datetime': fields.DateTime,
-    'unixstamp': fields.UnixStamp,
-
-    'object': fields.Object,
-    'array<object>': fields.ObjectArray,
-
-    'itemexpr': fields.ItemExpr,
-    'array<itemexpr>': fields.ItemExprArray,
-
-    'ItemExpr': fields.ItemExpr,
-    'array<ItemExpr>': fields.ItemExprArray,
-
-    'Reward': fields.Reward,
-    'reward': fields.Reward,
-
-    'Ratio': fields.Ratio,
-    'ratio': fields.Ratio,
-
-    'bignumber': fields.BigNumber,
-    'BigNumber': fields.BigNumber,
+    "": fields.Auto,
+    "auto": fields.Auto,
+    "bool": fields.Bool,
+    "int": fields.Int,
+    "number": fields.Int,
+    "float": fields.Float,
+    "str": fields.String,
+    "string": fields.String,
+    "array": fields.Array,
+    "array<int>": fields.IntArray,
+    "array<float>": fields.FloatArray,
+    "array<string>": fields.Array,
+    "map<string,string>": fields.Map,
+    "map<string, string>": fields.Map,
+    "date": fields.Date,
+    "datetime": fields.DateTime,
+    "unixstamp": fields.UnixStamp,
+    "object": fields.Object,
+    "array<object>": fields.ObjectArray,
+    "itemexpr": fields.ItemExpr,
+    "array<itemexpr>": fields.ItemExprArray,
+    "ItemExpr": fields.ItemExpr,
+    "array<ItemExpr>": fields.ItemExprArray,
+    "Reward": fields.Reward,
+    "reward": fields.Reward,
+    "Ratio": fields.Ratio,
+    "ratio": fields.Ratio,
+    "bignumber": fields.BigNumber,
+    "BigNumber": fields.BigNumber,
 }
 
 
@@ -66,19 +56,19 @@ class FieldMeta:
 
     @property
     def nameRowIdx(self):
-        return self._lineNumCfg['name']
+        return self._lineNumCfg["name"]
 
     @property
     def typeRowIdx(self):
-        return self._lineNumCfg['type']
+        return self._lineNumCfg["type"]
 
     @property
     def descRowIdx(self):
-        return self._lineNumCfg['desc']
+        return self._lineNumCfg["desc"]
 
     @property
     def dataRowIdx(self):
-        return self._lineNumCfg['data']
+        return self._lineNumCfg["data"]
 
     @classmethod
     def parseFieldType(cls, fieldType: str) -> str:
@@ -98,7 +88,6 @@ class FieldMeta:
             return None
         return meta(name, fieldType)
 
-
     def parseSheet(self, excel, sheet):
         if sheet.nrows < self.nameRowIdx + 1:
             return {}
@@ -116,13 +105,18 @@ class FieldMeta:
                 continue
             fieldMeta = DEFINE_FIELDS.get(self.parseFieldType(fieldType))
             if not fieldMeta:
-                raise RuntimeError('%-12s : Unexist field meta "%s". check the field(%s)' % (excel.fname, fieldType, repr(typeRow[i])))
+                raise RuntimeError(
+                    '%-12s : Unexist field meta "%s". check the field(%s)'
+                    % (excel.fname, fieldType, repr(typeRow[i]))
+                )
 
             fields[fieldName] = fieldMeta(fieldName, fieldType, excel)
             i += 1
             pass
         return fields
+
     pass
+
 
 class Excel:
     def __init__(self, fpathOrFp, fieldMeta=FieldMeta(name=0, type=1, desc=2, data=3)):
@@ -152,7 +146,7 @@ class Excel:
 
         return ""
 
-    def getSheet(self, sheetName, alias=''):
+    def getSheet(self, sheetName, alias=""):
         sheet = None
         try:
             sheet = self.__wb.sheet_by_name(sheetName)
@@ -171,7 +165,7 @@ class Excel:
     def __iter__(self):
         sheets = map(lambda x: Sheet(self, x), self.__wb.sheets())
         for sheet in sheets:
-            if sheet.name.startswith('#'):
+            if sheet.name.startswith("#"):
                 continue
             yield sheet
         pass
@@ -190,7 +184,6 @@ class Excel:
 
 
 class Sheet:
-
     def __init__(self, excel, sheet):
         self.__excel = excel
         self.__sheet = sheet
@@ -237,14 +230,16 @@ class Sheet:
         _dict = OrderedDict()
         firstField = self.firstFieldName()
         if not firstField:
-            return self.throwException(f"Invalid first field name. \"{firstField}\"")
+            return self.throwException(f'Invalid first field name. "{firstField}"')
         for row in self:
             if not row:
                 continue
 
             value = row[firstField]
             if (not valueIsList) and (value in _dict):
-                return self.throwException("Duplicate value of field name. %s=%s" % (firstField, value))
+                return self.throwException(
+                    "Duplicate value of field name. %s=%s" % (firstField, value)
+                )
             _dict[value] = row
         return _dict
 
@@ -265,6 +260,7 @@ class Sheet:
 
     def toDataFrame(self):
         import pandas
+
         return pandas.DataFrame(self, columns=self.fields().keys())
 
     @property
@@ -286,8 +282,18 @@ class Sheet:
                 try:
                     _dict[field.name] = field.format(cell.value)
                 except Exception as ex:
-                    print("%-12s : Failed to parse the value:\"%s\" of Field(name=%s type=%s). row: %s col: %s\n\t err: %s" \
-                          %(self.fname,  cell.value, field.name, field.type, utils.show_row(rowNum), utils.show_col(i), str(ex)))
+                    print(
+                        '%-12s : Failed to parse the value:"%s" of Field(name=%s type=%s). row: %s col: %s\n\t err: %s'
+                        % (
+                            self.fname,
+                            cell.value,
+                            field.name,
+                            field.type,
+                            utils.show_row(rowNum),
+                            utils.show_col(i),
+                            str(ex),
+                        )
+                    )
                     pass
 
             yield _dict
@@ -302,6 +308,7 @@ def addFieldType(typeName, parser):
 def delFieldType(typeName, parser):
     del DEFINE_FIELDS[typeName]
     pass
+
 
 def setUnits(text, size=1000):
     fields.BigNumber.setUnits(text, size=size)
