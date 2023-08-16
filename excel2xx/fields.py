@@ -2,8 +2,9 @@
 from __future__ import unicode_literals, print_function
 
 import datetime
-import math
 import re
+import json
+import math
 from collections import namedtuple, OrderedDict
 from pprint import pformat
 
@@ -409,7 +410,7 @@ class Number(Field):
 
     UNITS = {}
     UNITS_IDX = {}
-    PARTERN = re.compile("(?P<count>\d+\.?\d*)(?P<unit>[a-zA-Z_]*)")
+    PARTERN = re.compile(r"(?P<count>\d+\.?\d*)(?P<unit>[a-zA-Z_]*)")
 
     def newException(self, value, suffix=""):
         return Exception(
@@ -459,3 +460,20 @@ class Number(Field):
 
 Number.setUnits("K,M,G,T,P,E", size=1024)
 BigNumber = Number
+
+
+class JSON(ItemExpr):
+    def newException(self, value):
+        return Exception(
+            "invalid json. name:%s type:%s value:%s" % (self.name, self.type, value)
+        )
+
+    def parseJson(self, value):
+        return json.loads(value)
+
+    def format(self, v):
+        if not v:
+            return None
+        if not isinstance(v, str):
+            raise self.newException(v)
+        return self.parseJson(v)

@@ -41,6 +41,7 @@ DEFINE_FIELDS = {
     "ratio": fields.Ratio,
     "bignumber": fields.BigNumber,
     "BigNumber": fields.BigNumber,
+    "json": fields.JSON,
 }
 
 

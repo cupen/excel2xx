@@ -8,7 +8,7 @@ readme = open(fpath, "r", encoding="utf-8").read()
 
 setup(
     name="excel2xx",
-    version="0.7.0",
+    version="0.8.0",
     packages=["excel2xx"],
     url="https://github.com/cupen/excel2xx",
     license="WTFPL",
@@ -20,7 +20,7 @@ setup(
     install_requires=[
         "xlrd == 1.2.*",
         "docopt >= 0.6.0",
-        "mako >= 1.1.*",
+        "mako == 1.1.*",
         "msgpack-python >= 0.4.8",
     ],
     entry_points={
@@ -28,7 +28,7 @@ setup(
             "excel2xx=excel2xx.main:main_docopt",
         ],
     },
-    python_requires=">=3.6.*,!=3.6.1",
+    python_requires=">=3.6,!=3.6.1",
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Environment :: Console",
