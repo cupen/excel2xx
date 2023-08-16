@@ -1,4 +1,4 @@
-# coding:utf-8
+# coding=utf-8
 from __future__ import unicode_literals, print_function
 
 import datetime
@@ -33,6 +33,9 @@ class Field:
         if typeName == "ItemExpr":
             return ItemExpr("as_type", typeName).format
         raise Exception("Invalid type %s" % typeName)
+        pass
+
+    pass
 
 
 class Int(Field):
