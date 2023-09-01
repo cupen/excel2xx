@@ -22,7 +22,7 @@ setup(
     install_requires=[
         "xlrd == 1.2.*",
         "docopt >= 0.6.0",
-        "mako == 1.1.*",
+        "mako == 1.2.*",
         "msgpack-python >= 0.4.8",
         "colorama >= 0.4.6",
     ],
