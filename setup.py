@@ -2,13 +2,15 @@ from setuptools import setup
 from io import open
 import os
 
-fpath = os.path.join(os.path.dirname(__file__), "README.md")
+root_dir = os.path.dirname(__file__)
+
+fpath = os.path.join(root_dir, "README.md")
 readme = open(fpath, "r", encoding="utf-8").read()
 
 
 setup(
     name="excel2xx",
-    version="0.9.1",
+    version="0.10.0",
     packages=["excel2xx"],
     url="https://github.com/cupen/excel2xx",
     license="WTFPL",
@@ -22,6 +24,7 @@ setup(
         "docopt >= 0.6.0",
         "mako == 1.1.*",
         "msgpack-python >= 0.4.8",
+        "colorama >= 0.4.6",
     ],
     entry_points={
         "console_scripts": [
