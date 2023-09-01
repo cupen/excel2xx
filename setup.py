@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 from io import open
 import os
 
@@ -10,8 +10,8 @@ readme = open(fpath, "r", encoding="utf-8").read()
 
 setup(
     name="excel2xx",
-    version="0.10.1",
-    packages=["excel2xx"],
+    version="0.10.2",
+    packages=find_packages(),
     url="https://github.com/cupen/excel2xx",
     license="WTFPL",
     author="cupen",

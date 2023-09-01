@@ -20,6 +20,10 @@ clean:
 	rm -fr build
 	rm -fr dist
 	rm -fr *.egg-info
+	# rm -fr ./**/__pycache__
+	rm -fr ./*/__pycache__
+	rm -fr ./*/*/__pycache__
+	rm -fr .testdata
 
 
 test:
