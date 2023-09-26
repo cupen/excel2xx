@@ -6,7 +6,7 @@ import xlrd
 from collections import OrderedDict
 from excel2xx import fields, utils, exportor, fieldmeta
 
-VERSION = "0.6.0"
+VERSION = "0.10.3"
 __author__ = "cupen"
 __email__ = "xcupen@gmail.com"
 
@@ -180,7 +180,7 @@ class Sheet:
                 try:
                     _dict[field.name] = field.format(cell.value)
                 except Exception as ex:
-                    print(
+                    console.error(
                         "%-12s : Field(name=%s type=%s). row: %s col: %s\n\t err: %s\n\t %s\n"
                         % (
                             self.fname,

@@ -88,6 +88,10 @@ class IntArray(Field):
     def format(self, v):
         if not v:
             return []
+        if isinstance(v, float):
+            if v != int(v):
+                raise Exception("Invalid cell type float")
+            return [int(v)]
         _iter = map(lambda x: x.strip(), v.split(","))
         return list(map(int, _iter))
 
