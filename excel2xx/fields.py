@@ -92,8 +92,14 @@ class IntArray(Field):
             if v != int(v):
                 raise Exception("Invalid cell type float")
             return [int(v)]
-        _iter = map(lambda x: x.strip(), v.split(","))
-        return list(map(int, _iter))
+        elif isinstance(v, int):
+            return [v]
+        elif isinstance(v, str):
+            _iter = map(lambda x: x.strip(), v.split(","))
+            return list(map(int, _iter))
+        else:
+            raise Exception("Invalid cell type " + str(type(v)))
+        return
 
 
 class Ratio(Field):

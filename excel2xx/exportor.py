@@ -15,7 +15,22 @@ def toKV(sheet, fields=("key", "type", "value")):
         meta = FieldMeta.parseField(key, valType)
         if key in d:
             raise Exception(f"duplicated key: {key}")
-        d[key] = meta.format(val)
+        try:
+            d[key] = meta.format(val)
+        except Exception as ex:
+            console.error(
+                "%-12s : Field(name=%s type=%s). row: %s col: %s\n\t err: %s\n\t %s\n"
+                % (
+                    self.fname,
+                    field.name,
+                    field.type,
+                    utils.show_row(rowNum),
+                    utils.show_col(i),
+                    str(ex),
+                    cell.value,
+                )
+            )
+            pass
         pass
     return d
 

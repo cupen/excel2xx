@@ -10,7 +10,7 @@ readme = open(fpath, "r", encoding="utf-8").read()
 
 setup(
     name="excel2xx",
-    version="0.10.3",
+    version="0.10.4",
     packages=find_packages(),
     url="https://github.com/cupen/excel2xx",
     license="WTFPL",

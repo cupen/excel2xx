@@ -6,7 +6,7 @@ import xlrd
 from collections import OrderedDict
 from excel2xx import fields, utils, exportor, fieldmeta
 
-VERSION = "0.10.3"
+VERSION = "0.10.4"
 __author__ = "cupen"
 __email__ = "xcupen@gmail.com"
 
