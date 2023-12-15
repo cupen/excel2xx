@@ -1,4 +1,4 @@
-# coding=utf-8
+# encoding: utf-8
 from __future__ import unicode_literals, print_function
 
 import datetime
@@ -490,3 +490,22 @@ class JSON(ItemExpr):
         if not isinstance(v, str):
             raise self.newException(v)
         return self.parseJson(v)
+
+
+class Duration(object):
+    def newException(self, value):
+        return Exception(
+            "invalid duration. name:%s type:%s value:%s" % (self.name, self.type, value)
+        )
+
+    def parseDuration(self, value):
+        if not isinstance(value, str):
+            raise self.newException(value)
+        nums = ""
+        state = 0
+        for c in value:
+            pass
+        return 0
+
+    def format(self, v):
+        return self.parseDuration(v)

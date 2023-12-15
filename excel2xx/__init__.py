@@ -4,9 +4,10 @@ import os
 from typing import Optional
 import xlrd
 from collections import OrderedDict
-from excel2xx import fields, utils, exportor, fieldmeta
+from excel2xx import utils, fields, fieldmeta
+import excel2xx.exporter as exporter
 
-VERSION = "0.10.4"
+VERSION = "0.11.0"
 __author__ = "cupen"
 __email__ = "xcupen@gmail.com"
 
@@ -154,7 +155,7 @@ class Sheet:
         return _dict
 
     def toKV(self):
-        return exportor.toKV(self)
+        return exporter.toKV(self)
 
     def toDataFrame(self):
         import pandas

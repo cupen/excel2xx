@@ -1,4 +1,4 @@
-# encoding=utf-8
+# encoding: utf-8
 from collections import OrderedDict
 from excel2xx.fieldmeta import FieldMeta
 

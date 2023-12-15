@@ -1,4 +1,4 @@
-# coding: utf-8
+# encoding: utf-8
 import os, sys
 import importlib
 import importlib.util

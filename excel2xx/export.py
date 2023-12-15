@@ -55,3 +55,15 @@ def toMsgPack(excel, output, encoding="utf-8"):
     with open(output, mode="wb") as f:
         f.write(msgpack.packb(_dict, default=_defaultSerialize))
     pass
+
+
+def toCSV(excel, output, encoding="utf-8"):
+    import msgpack
+
+    _dict = OrderedDict()
+    for sheet in excel:
+        _dict[sheet.name] = list(sheet)
+
+    with open(output, mode="wb") as f:
+        f.write(msgpack.packb(_dict, default=_defaultSerialize))
+    pass
