@@ -7,7 +7,7 @@ from collections import OrderedDict
 from excel2xx import utils, fields, fieldmeta
 import excel2xx.exporter as exporter
 
-VERSION = "0.11.0"
+VERSION = "0.11.1"
 __author__ = "cupen"
 __email__ = "xcupen@gmail.com"
 
@@ -101,14 +101,35 @@ class Sheet:
 
     def rows(self):
         skipRows = self.__excel.fieldMeta.dataRowIdx
+        emptyRows = []
         for row in self.__sheet.get_rows():
             if skipRows > 0:
                 skipRows -= 1
                 # print(row)
                 continue
 
+            if len(row) <= 0:
+                emptyRows+=1
+                continue
+
+            if self._isEmptyRow(row):
+                emptyRows.append(row)
+                continue
+            elif len(emptyRows) > 0:
+                raise self.throwException(f"Invalid row with empty'{emptyRows[0]}'")
             yield row
         pass
+
+    def _isEmptyRow(self, row):
+        _fields = self.fields()
+        len(_fields)
+        if len(row) > len(_fields):
+            row = row[:len(_fields)]
+        for cell in row:
+            if cell.ctype != xlrd.XL_CELL_EMPTY:
+                return False
+            pass
+        return True
 
     def toList(self):
         return list(iter(self))
@@ -159,7 +180,6 @@ class Sheet:
 
     def toDataFrame(self):
         import pandas
-
         return pandas.DataFrame(self, columns=self.fields().keys())
 
     @property
