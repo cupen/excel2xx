@@ -109,7 +109,7 @@ class Sheet:
                 continue
 
             if len(row) <= 0:
-                emptyRows+=1
+                emptyRows += 1
                 continue
 
             if self._isEmptyRow(row):
@@ -124,7 +124,7 @@ class Sheet:
         _fields = self.fields()
         len(_fields)
         if len(row) > len(_fields):
-            row = row[:len(_fields)]
+            row = row[: len(_fields)]
         for cell in row:
             if cell.ctype != xlrd.XL_CELL_EMPTY:
                 return False
@@ -180,6 +180,7 @@ class Sheet:
 
     def toDataFrame(self):
         import pandas
+
         return pandas.DataFrame(self, columns=self.fields().keys())
 
     @property
