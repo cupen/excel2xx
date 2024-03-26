@@ -1,6 +1,8 @@
 # coding: utf-8
 import colorama
 from colorama import Fore
+from .colors import Colors
+__all__ = ["Colors"]
 
 # from .colors import Colors
 colorama.init(autoreset=True)
