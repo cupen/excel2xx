@@ -4,10 +4,11 @@ import os
 from typing import Optional
 import xlrd
 from collections import OrderedDict
-from excel2xx import utils, fields, fieldmeta
+from excel2xx import utils, fields, fieldmeta, console
 import excel2xx.exporter as exporter
 
-VERSION = "0.11.1"
+
+VERSION = "0.11.2"
 __author__ = "cupen"
 __email__ = "xcupen@gmail.com"
 

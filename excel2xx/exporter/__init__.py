@@ -1,6 +1,7 @@
 # encoding: utf-8
 from collections import OrderedDict
 from excel2xx.fieldmeta import FieldMeta
+from excel2xx import console
 
 
 def toKV(sheet, fields=("key", "type", "value")):
