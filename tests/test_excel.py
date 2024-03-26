@@ -3,12 +3,18 @@ import json
 from conftest import testdata_dir
 import openpyxl
 from openpyxl.styles import Font, Color
+# import pytest
 
 excel_dir = os.path.join(testdata_dir, "_excel")
 excel_files = [
     os.path.join(excel_dir, "test-default.xlsx"),
     os.path.join(excel_dir, "test-data-row.xlsx"),
 ]
+
+# @pytest.fixture(scope="module")
+def setup_module():
+    os.makedirs(excel_dir, exist_ok=True)
+    pass
 
 
 def F(fname):
@@ -54,6 +60,7 @@ def test_datarow():
 
 
 def gen_default():
+    setup_module()
     w = openpyxl.Workbook()
     s = w.create_sheet(title="auto")
     s.append(["key", "type", "value"])
@@ -83,6 +90,7 @@ def gen_default():
 
 
 def gen_datarow():
+    setup_module()
     w = openpyxl.Workbook()
     s = w.create_sheet(title="auto")
     s.append(["key", "type", "value"])
