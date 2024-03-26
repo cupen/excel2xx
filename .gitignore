@@ -6,7 +6,6 @@
 
 *.py[cd]
 *.tar.gz
-*.txt
 *.zip
 *.js
 *.json
