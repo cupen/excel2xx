@@ -24,7 +24,7 @@ print(deps)
 
 setup(
     name="excel2xx",
-    version="0.11.4",
+    version="0.11.5",
     packages=find_packages(),
     url="https://github.com/cupen/excel2xx",
     license="WTFPL",
