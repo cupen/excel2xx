@@ -38,7 +38,7 @@ def run(data, data_dir: str, validator_name="_validator"):
 def list_files(_dir: str):
     import bisect
 
-    rs = []
+    rs = []  # type: list[str]
     for base, dirs, files in os.walk(_dir):
         for fname in files:
             if not fname.endswith(".py"):
@@ -51,19 +51,3 @@ def list_files(_dir: str):
             pass
         pass
     return rs
-
-
-def green(text):
-    return Fore.LIGHTGREEN_EX + str(text) + Fore.RESET
-
-
-def red(text):
-    return Fore.LIGHTRED_EX + str(text) + Fore.RESET
-
-
-def blue(text):
-    return Fore.LIGHTBLUE_EX + str(text) + Fore.RESET
-
-
-def yellow(text):
-    return Fore.LIGHTYELLOW_EX + str(text) + Fore.RESET

@@ -5,6 +5,7 @@ python:=$(python_venv)/bin/python
 
 init:
 	python -m venv $(python_venv)
+	$(python) -m pip install -r requirements-dev.txt
 
 
 reinit:
@@ -37,3 +38,8 @@ publish-test: build
 publish: build
 	twine upload dist/*
 
+
+.PHONY: run-exmaple
+run-example: 
+	$(python) -m pip install -e .
+	cd example && make build

@@ -8,7 +8,7 @@ from excel2xx import utils, fields, fieldmeta, console
 import excel2xx.exporter as exporter
 
 
-VERSION = "0.11.2"
+VERSION = "0.11.3"
 __author__ = "cupen"
 __email__ = "xcupen@gmail.com"
 

@@ -4,13 +4,23 @@ import os
 
 root_dir = os.path.dirname(__file__)
 
-fpath = os.path.join(root_dir, "README.md")
-readme = open(fpath, "r", encoding="utf-8").read()
+_open = lambda fname: open(os.path.join(root_dir, fname), "r", encoding="utf-8")
+with _open("README.md") as fp:
+    readme = fp.read()
+    pass
+
+with _open("requirements.txt") as fp:
+    deps = map(str.strip, fp.readlines())
+    deps = filter(lambda line: bool(line), deps)
+    deps = list(deps)
+    pass
+
+print(deps)
 
 
 setup(
     name="excel2xx",
-    version="0.11.2",
+    version="0.11.3",
     packages=find_packages(),
     url="https://github.com/cupen/excel2xx",
     license="WTFPL",
@@ -19,13 +29,7 @@ setup(
     description="Extract data from excel file, and export to json, msgpack, or any code(mako template).",
     long_description=readme,
     long_description_content_type="text/markdown",
-    install_requires=[
-        "xlrd == 1.2.*",
-        "docopt >= 0.6.0",
-        "mako == 1.2.*",
-        "msgpack-python >= 0.4.8",
-        "colorama >= 0.4.6",
-    ],
+    install_requires=deps,
     entry_points={
         "console_scripts": [
             "excel2xx=excel2xx.main:main_docopt",

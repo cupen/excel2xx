@@ -12,13 +12,15 @@ Arguments:
 
 Options:
     -h --help                      show this help message and exit.
-    -v --version                   show version and exit.
+    --version                      show version and exit.
     -o --output=FILE               output to file.
-    -r --row-number=ROW_NUMBER     first row. [default: 2]
+    --name-row=NAME_ROW            name row number. [default: 1]
+    --type-row=TYPE_ROW            type row number. [default: 2]
+    --desc-row=DESC_ROW            desc row number. [default: 3]
+    --data-row=DATA_ROW            data row number. [default: 4]
     -v --verbose                   show debug infomation.
     -vv --verbose2                 show more debug infomation.
 """
-from __future__ import unicode_literals, print_function
 import os
 import traceback
 from docopt import docopt
@@ -38,8 +40,13 @@ def main(args):
         print("Unexist file:" + excelFile)
         return 1
 
-    excel = Excel(excelFile, fieldMeta=FieldMeta())
-
+    meta = FieldMeta(
+        name=int(args["--name-row"]) - 1,
+        type=int(args["--type-row"]) - 1,
+        desc=int(args["--desc-row"]) - 1,
+        data=int(args["--data-row"]) - 1,
+    )
+    excel = Excel(excelFile, fieldMeta=meta)
     if args["json"]:
         export.toJson(excel, args["--output"] or "%(excelFile)s.json" % locals())
     elif args["msgpack"]:
@@ -51,12 +58,11 @@ def main(args):
     else:
         print("Invalid subcmd.")
         return 2
-
     return 0
 
 
-def main_docopt():
-    args = docopt(__doc__)
+def main_docopt(argv=None):
+    args = docopt(__doc__, argv)
     if args["--verbose2"]:
         print(args)
     try:
@@ -69,4 +75,6 @@ def main_docopt():
 
 
 if __name__ == "__main__":
-    exit(main_docopt())
+    import sys
+
+    exit(main_docopt(sys.argv))

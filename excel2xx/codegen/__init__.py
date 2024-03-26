@@ -29,6 +29,7 @@ def generate(src: list, context={}, note=NOTE, encoding="utf-8", newline="\n"):
     print(f"\ttemplate files: {len(fpaths)}")
 
     for fpath in fpaths:
+        fpath_new = fpath.replace(".mako", "")
         print(f"\t{fpath} -> ", end="")
         if not fpath.endswith(".mako"):
             print(console.Colors.yellow(fpath_new))
@@ -39,7 +40,6 @@ def generate(src: list, context={}, note=NOTE, encoding="utf-8", newline="\n"):
         ctx["__dir__"] = os.path.dirname(fpath)
 
         tmpl = load_template(fpath)
-        fpath_new = fpath.replace(".mako", "")
         try:
             text = tmpl.render(**ctx)
             with open(fpath_new, "w", encoding=encoding, newline=newline) as fp:

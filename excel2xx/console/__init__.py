@@ -1,4 +1,7 @@
 # coding: utf-8
+import colorama
+
+colorama.init(autoreset=True)
 from colorama import Fore, Back, Style
 from .colors import Colors
 

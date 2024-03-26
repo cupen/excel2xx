@@ -1,6 +1,6 @@
 local t = {
-% for sheet in excel:
-    ${sheet.name} = {
+% for name, sheet in excel.items():
+    ${name} = {
     % for row in sheet:
         {
         % for key in row:

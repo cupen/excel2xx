@@ -1,7 +1,7 @@
 root_dir:=$(abspath $(CURDIR)/..)
-build_dir:=$(root_path)/example/build
-excel2xx_bin:=python3 -m excel2xx
-excel2xx_bin_debug:=EXCEL2XX_DEBUG=1 python3 -m excel2xx
+build_dir:=$(root_dir)/example/build
+excel2xx_bin:=$(root_dir)/.venv/bin/excel2xx
+excel2xx_bin_debug:=EXCEL2XX_DEBUG=1 $(excel2xx_bin)
 
 
 build: clean
