@@ -25,19 +25,24 @@ import os
 import traceback
 from docopt import docopt
 from excel2xx import Excel, export, FieldMeta
+from excel2xx.version import VERSION
 
 
 def main(args):
-    excelFile = args["<excel>"]
-    outputFile = args["--output"]
+    if args["--version"]:
+        print(VERSION)
+        return 0
+    fexcel = args["<excel>"]
+    foutput = args["--output"]
+    ftmpl = args["--template"]
 
-    if excelFile:
-        excelFile = os.path.realpath(excelFile)
-    if outputFile:
-        outputFile = os.path.realpath(outputFile)
+    if fexcel:
+        fexcel = os.path.realpath(fexcel)
+    if foutput:
+        foutput = os.path.realpath(foutput)
 
-    if not os.path.isfile(excelFile):
-        print("Unexist file:" + excelFile)
+    if not os.path.isfile(fexcel):
+        print("Unexist file:" + fexcel)
         return 1
 
     meta = FieldMeta(
@@ -46,15 +51,16 @@ def main(args):
         desc=int(args["--desc-row"]) - 1,
         data=int(args["--data-row"]) - 1,
     )
-    excel = Excel(excelFile, fieldMeta=meta)
+    excel = Excel(fexcel, fieldMeta=meta)
     if args["json"]:
-        export.toJson(excel, args["--output"] or "%(excelFile)s.json" % locals())
+        output = foutput or f"{fexcel}.json"
+        export.toJson(excel, output)
     elif args["msgpack"]:
-        export.toMsgPack(excel, args["--output"] or "%(excelFile)s.json" % locals())
+        output = foutput or f"{fexcel}.msgp"
+        export.toMsgPack(excel, output)
     elif args["mako"]:
-        export.toMako(
-            excel, args["--output"] or "%(--template)s.mako" % args, args["--template"]
-        )
+        output = foutput or f"{template}.mako"
+        export.toMako(excel, foutput, ftmpl)
     else:
         print("Invalid subcmd.")
         return 2
@@ -78,3 +84,4 @@ if __name__ == "__main__":
     import sys
 
     exit(main_docopt(sys.argv))
+

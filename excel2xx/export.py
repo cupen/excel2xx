@@ -25,11 +25,11 @@ def toJson(excel, output, encoding="utf-8"):
 
 def toMako(excel, output, template, encoding="utf-8"):
     data = auto.export(excel)
-    with open(output, mode="w", encoding=encoding) as ouputfile:
+    with open(output, "w", encoding=encoding) as fp:
         text = ""
-        with open(template, mode="r", encoding=encoding) as f:
+        with open(template, "r", encoding=encoding) as f:
             text = Template(f.read()).render(excel=data, format=pformat)
-        ouputfile.write(text)
+        fp.write(text)
     pass
 
 
@@ -37,8 +37,8 @@ def toMsgPack(excel, output, encoding="utf-8"):
     import msgpack
 
     data = auto.export(excel)
-    with open(output, mode="wb") as f:
-        f.write(msgpack.packb(data, default=_defaultSerialize))
+    with open(output, mode="wb") as fp:
+        fp.write(msgpack.packb(data, default=_defaultSerialize))
     pass
 
 
