@@ -20,7 +20,7 @@ def export(ex, ver=1):
     return d
 
 
-def parse_sheet_name(name: str) -> tuple[str, str]:
+def parse_sheet_name(name: str) -> (str, str):
     """
     >>> _parse_sheet_name("name")
     ('name', 'list')
@@ -41,7 +41,7 @@ def parse_sheet_name(name: str) -> tuple[str, str]:
     return _parse_sheet_name(name)
 
 
-def _parse_sheet_name(name) -> tuple[str, str]:
+def _parse_sheet_name(name) -> (str, str):
     realName = ""
     realType = ""
     state = 0  # 0-start, 1-name, 2-type, 3-end
