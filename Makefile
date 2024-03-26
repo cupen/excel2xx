@@ -28,7 +28,7 @@ clean:
 
 
 test:
-	tox
+	$(python) -m pytest --doctest-modules -v
 
 
 publish-test: build
