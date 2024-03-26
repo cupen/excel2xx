@@ -1,12 +1,13 @@
 # encoding: utf-8
 from __future__ import unicode_literals, print_function
 import os
-from typing import Optional
 import xlrd
 from collections import OrderedDict
 from excel2xx import utils, fields, fieldmeta, console
 import excel2xx.exporter as exporter
-from .version import VERSION 
+from .version import VERSION
+
+_ = VERSION
 
 __author__ = "cupen"
 __email__ = "xcupen@gmail.com"

@@ -1,8 +1,7 @@
 # encoding: utf-8
-import os, sys
+import os
 import importlib
 import importlib.util
-from colorama import Fore, Back, Style
 from excel2xx import console
 
 
@@ -18,9 +17,9 @@ def run(data, data_dir: str, validator_name="_validator"):
     validator_dir = os.path.join(data_dir, validator_name)
     for fpath in list_files(validator_dir):
         show = fpath[len(data_dir) :].strip("/")
-        fpathx = console.Colors.blue(show)
+        # fpathx = console.Colors.blue(show)
         print(f"\t{show} -> ", end="")
-        mpath = fpath.replace("/", ".").replace(".py", "")
+        # mpath = fpath.replace("/", ".").replace(".py", "")
         pkgname = os.path.basename(fpath).split(".")[0]
         mod = import_validator(pkgname, fpath)
         try:

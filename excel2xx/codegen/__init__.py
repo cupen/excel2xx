@@ -1,5 +1,5 @@
 # encoding: utf-8
-import os, sys
+import os
 import logging
 import glob
 import traceback
@@ -50,7 +50,7 @@ def generate(src: list, context={}, note=NOTE, encoding="utf-8", newline="\n"):
             print(console.Colors.green(fpath_new))
             if fpath_new.endswith(".go"):
                 os.system(f"go fmt {fpath_new} 2>&1 > /dev/null")
-        except Exception as ex:
+        except Exception:
             print(console.Colors.red(fpath_new))
             print("")
             print(console.Colors.red(f"something wrong with '{fpath}'"))

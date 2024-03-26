@@ -1,8 +1,6 @@
 # coding: utf-8
 from __future__ import unicode_literals, print_function
-import sys
 import json
-from collections import OrderedDict
 from pprint import pformat
 from mako.template import Template
 from io import open
@@ -43,6 +41,6 @@ def toMsgPack(excel, output, encoding="utf-8"):
 
 
 def toCSV(excel, output, encoding="utf-8"):
-    data = exporter.auto(excel)
+    # data = auto.export(excel)
     raise NotImplementedError("toCSV")
     pass

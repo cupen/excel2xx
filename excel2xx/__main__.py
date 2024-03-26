@@ -1,5 +1,6 @@
 # encoding: utf-8
-import os, sys
+import os
+import sys
 
 debug = os.environ.get("EXCEL2XX_DEBUG", 0)
 if debug:

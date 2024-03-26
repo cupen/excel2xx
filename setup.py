@@ -4,7 +4,11 @@ import os
 
 root_dir = os.path.dirname(__file__)
 
-_open = lambda fname: open(os.path.join(root_dir, fname), "r", encoding="utf-8")
+
+def _open(fname):
+    return open(os.path.join(root_dir, fname), "r", encoding="utf-8")
+
+
 with _open("README.md") as fp:
     readme = fp.read()
     pass

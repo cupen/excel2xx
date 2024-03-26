@@ -48,13 +48,13 @@ def _parse_sheet_name(name) -> (str, str):
     for c in name:
         if c == "(":
             if state != 1:
-                raise Exception(f"duplicated symbol '('")
+                raise Exception("duplicated symbol '('")
             state = 2
         elif c == ")":
             if state != 2:
-                raise Exception(f" ')' must behind of '('")
+                raise Exception(" ')' must behind of '('")
             if len(realType) <= 0:
-                raise Exception(f" '()' must be one of list, map, kv")
+                raise Exception(" '()' must be one of list, map, kv")
             state = 3
             break  # end
         else:
@@ -68,7 +68,7 @@ def _parse_sheet_name(name) -> (str, str):
             elif state == 2:
                 realType += c
             else:
-                raise Exception(f"BUG!")
+                raise Exception("BUG!")
             pass
         pass
     if realType == "":

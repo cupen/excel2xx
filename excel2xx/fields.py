@@ -106,7 +106,7 @@ class Ratio(Field):
     def format(self, v):
         try:
             if not v:
-                raise Exception(f"empty value")
+                raise Exception("empty value")
             arr = v.split(":")
             if len(arr) != 2:
                 raise Exception("it must be two numbers.")
@@ -153,7 +153,7 @@ class Date(Field):
     def format(self, v):
         try:
             return xldate_as_datetime(v, self.wb.datemode).date()
-        except:
+        except Exception:
             return None
 
 
@@ -161,7 +161,7 @@ class DateTime(Field):
     def format(self, v):
         try:
             return xldate_as_datetime(v, self.wb.datemode)
-        except:
+        except Exception:
             return None
 
 
@@ -501,11 +501,11 @@ class Duration(object):
     def parseDuration(self, value):
         if not isinstance(value, str):
             raise self.newException(value)
-        nums = ""
         state = 0
         for c in value:
             pass
         return 0
 
     def format(self, v):
-        return self.parseDuration(v)
+        raise NotImplementedError("Duration.format")
+        # return self.parseDuration(v)

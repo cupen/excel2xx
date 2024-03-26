@@ -2,7 +2,6 @@ import os
 import json
 from conftest import testdata_dir
 import openpyxl
-from openpyxl.styles import Font, Color
 # import pytest
 
 excel_dir = os.path.join(testdata_dir, "_excel")
@@ -10,6 +9,7 @@ excel_files = [
     os.path.join(excel_dir, "test-default.xlsx"),
     os.path.join(excel_dir, "test-data-row.xlsx"),
 ]
+
 
 # @pytest.fixture(scope="module")
 def setup_module():
@@ -55,8 +55,6 @@ def test_datarow():
     assert 1 == len(data["sheet2"])
     assert 3 == len(data["sheet-map"])
     pass
-
-
 
 
 def gen_default():

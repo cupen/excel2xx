@@ -1,8 +1,3 @@
-import os
-import json
-
-
-
 def test_version():
     from excel2xx import main
 

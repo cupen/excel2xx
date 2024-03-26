@@ -1,9 +1,9 @@
 # coding: utf-8
 import colorama
+from colorama import Fore
 
+# from .colors import Colors
 colorama.init(autoreset=True)
-from colorama import Fore, Back, Style
-from .colors import Colors
 
 
 def info(text):
