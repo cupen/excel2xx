@@ -31,6 +31,11 @@ test:
 	$(python) -m pytest --doctest-modules -v
 
 
+lint:
+	ruff format
+	ruff check
+
+
 publish-test: build
 	twine upload -r testpypi dist/*
 
