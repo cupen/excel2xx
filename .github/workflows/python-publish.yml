@@ -15,6 +15,9 @@ jobs:
     permissions:
       id-token: write
     steps:
+    - name: Build package
+      run: pipx run build --sdist --wheel
+
     - name: Publish package
       uses: pypa/gh-action-pypi-publish@release/v1
       with:

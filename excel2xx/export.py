@@ -24,9 +24,12 @@ def toJson(excel, output, encoding="utf-8"):
 def toMako(excel, output, template, encoding="utf-8"):
     data = auto.export(excel)
     with open(output, "w", encoding=encoding) as fp:
-        text = ""
-        with open(template, "r", encoding=encoding) as f:
-            text = Template(f.read()).render(excel=data, format=pformat)
+        context = {
+            "excel": data, 
+            "format": pformat,
+        }
+        with open(template, "r", encoding=encoding) as fpTmpl:
+            text = Template(fpTmpl.read()).render(**context)
         fp.write(text)
     pass
 

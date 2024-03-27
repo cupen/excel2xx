@@ -5,13 +5,15 @@ Usage:
     excel2xx.py json    <excel> [options]
     excel2xx.py msgpack <excel> [options]
     excel2xx.py mako    <excel> --template=FILE [options]
+    excel2xx.py build   --from=DIR --to=DIR  [options]
+    excel2xx.py codegen --from=DIR --to=GLOB [options]
     excel2xx.py --version
 
 Arguments:
     <excel>                        Excel file path.
 
 Options:
-    -h --help                      show this help message and exit.
+    -h --help                      show this help infomation and exit.
     --version                      show version and exit.
     -o --output=FILE               output to file.
     --name-row=NAME_ROW            name row number. [default: 1]
@@ -61,9 +63,13 @@ def main(args):
     elif args["mako"]:
         template = args["--template"]
         if not dest:
-            print("missing '--template', which is mako template file.")
+            print("Missing '--template', which is mako template file.")
             return 1
         export.toMako(excel, dest, template)
+    elif args["build"]:
+        raise NotImplementedError("build is developing.")
+    elif args["codegen"]:
+        raise NotImplementedError("codegen is developing.")
     else:
         print("Invalid subcmd.")
         return 2

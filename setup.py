@@ -19,13 +19,11 @@ with _open("requirements.txt") as fp:
     deps = list(deps)
     pass
 
-print(deps)
-
+print(f"requirements={deps}")
 
 setup(
     name="excel2xx",
     version="0.11.6",
-    packages=find_packages(),
     url="https://github.com/cupen/excel2xx",
     license="WTFPL",
     author="cupen",
@@ -55,4 +53,5 @@ setup(
         "Programming Language :: Python :: Implementation :: CPython",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
+    packages=find_packages(),
 )

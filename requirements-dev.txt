@@ -1,5 +1,5 @@
 -r requirements.txt
-wheel
+build
 mypy
 pytest
 pytest-sugar
