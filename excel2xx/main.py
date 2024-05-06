@@ -2,7 +2,7 @@
 """Export data from Excel file.
 
 Usage:
-    excel2xx.py json    <excel> -o FILE -- [options]
+    excel2xx.py json    <excel> -o FILE [options]
     excel2xx.py msgpack <excel> -o FILE [options]
     excel2xx.py mako    <excel> --template=FILE [options]
     excel2xx.py build   --from=DIR --to=DIR  [options]
@@ -55,16 +55,17 @@ def main(args):
     )
     excel = Excel(src, fieldMeta=meta)
     if args["json"]:
-        dest = dest or f"{src}.json"
+        dest = dest or make_fname(src, ".json")
         export.toJson(excel, dest)
     elif args["msgpack"]:
-        dest = dest or f"{src}.msgp"
+        dest = dest or make_fname(src, ".msgp")
         export.toMsgPack(excel, dest)
     elif args["mako"]:
         template = args["--template"]
-        if not dest:
+        if not template:
             print("Missing '--template', which is mako template file.")
             return 1
+        dest = dest or os.path.splitext(template)[0]
         export.toMako(excel, dest, template)
     elif args["build"]:
         raise NotImplementedError("build is developing.")
@@ -88,6 +89,8 @@ def main_docopt(argv=None):
         return 2
     pass
 
+def make_fname(src, ext):
+    return os.path.splitext(src)[0] + ext
 
 if __name__ == "__main__":
     import sys
