@@ -23,7 +23,7 @@ print(f"requirements={deps}")
 
 setup(
     name="excel2xx",
-    version="0.11.6",
+    version="0.11.7",
     url="https://github.com/cupen/excel2xx",
     license="WTFPL",
     author="cupen",
@@ -52,6 +52,8 @@ setup(
         "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: Implementation :: CPython",
         "Topic :: Software Development :: Libraries :: Python Modules",
+        "Topic :: Software Development :: Compilers",
+        "Topic :: Software Development :: Code Generators",
     ],
     packages=find_packages(),
 )

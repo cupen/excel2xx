@@ -2,8 +2,8 @@
 """Export data from Excel file.
 
 Usage:
-    excel2xx.py json    <excel> [options]
-    excel2xx.py msgpack <excel> [options]
+    excel2xx.py json    <excel> -o FILE -- [options]
+    excel2xx.py msgpack <excel> -o FILE [options]
     excel2xx.py mako    <excel> --template=FILE [options]
     excel2xx.py build   --from=DIR --to=DIR  [options]
     excel2xx.py codegen --from=DIR --to=GLOB [options]
