@@ -42,7 +42,7 @@ publish-test: build
 
 
 publish: build
-	twine upload dist/*
+	$(python_venv)/bin/twine upload dist/*
 
 
 .PHONY: run-exmaple
